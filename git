@@ -1,0 +1,87 @@
+• GIT is a software used for version control of files and folders
+ 
+
+• GITHUB is when instead of storing the versions of your files and folders locally, you store them remotely on github 
+  servers 
+  - gitlab and bitbucket serve the same function
+
+GIT
+
+* Setting up a basic git system
+
+
+   • `git init` - is the command first run to initialize git on your system.
+                - this is used to create a new repository (a directory for a project)
+
+   • `git add <path to file>` - choose what you want to save the current version of. 
+                              - `git add .` to choose to save the pwd
+                              - it's added to the staging area
+
+   • `git status` - displays the staging area
+
+
+   • `git commit` -  actually commits these changes to memory.
+                  - `-m 'stuff'` - this flag is used to add a description of the committed files (message)
+                  - `git commit -m 'added images'` 
+                  - `git commit -a` - commits files all appended files without staging 
+     
+
+   • `git diff` - shows diff between pwd and the staging area
+               - `git diff <commit> <commit>` - displays diff between commits        
+
+              
+   • `git log` - see a log of all previous commits
+              - and stores the message and hash of each commit
+
+
+ 
+* Working on a group project with git
+
+
+   • `git clone <repo/to/be/cloned>` - clones a repository. this is often done for a remote repository so you can work 
+                                       on this individually and push changes when required.
+                                     - specify the url of the repo, the ssh path of the repo or the normal local path.
+ 
+
+   • `git checkout <commit hash>` - returns back to previous saved state
+                               
+      `git checkout -b <branch name>` - makes a new branch
+
+
+
+* Branches and shit
+
+
+  • `git branch <new_branch_name> - makes a new branch
+                                - `git branch` without specifying a branch name, lists created branches
+
+
+  • `git switch <branch_name>` and `git checkout <branch_name>` - both switch to a new branch, so all future commits 
+                                                                   are made on that branch
+  • `git rebase` - means to change  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

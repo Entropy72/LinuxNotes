@@ -1,0 +1,50 @@
+STOPPING A PROGRAM
+
+
+
+• kill 
+         - the kill command is used to send a signal to a program
+	 - the signal is often to end the program but not always, and the signal can be used for other things
+
+
+   Usage:
+            - `kill -<signal> <process id>`
+            - you have to specify what signal you want to send to a process
+	    - if not specified the default is KILLTERM
+
+
+       Signals:
+                  - SIGTERM or 15 - is a default attempt to end a process. it is a light way and doesn't always work
+                  - SIGKILL or 9 - is the absolute kill method. it ends a process, and always works.
+ 
+                  - SIGHUP or 1 - original purpose - when ppl got disconnected from a remote system, and they are no
+                                  longer in the system, the program is told to stop as the user has "hungup"
+				- newer purpose - used to refresh configuration file. occurs most of the time
+                                - SIGHUP could both refresh the config file or end a program. depends on the programmer
+				  It's usually the newer option tho (refresh config and reload program)
+
+
+• killall 
+            - same as kill
+            - kills all process that have that name
+            - sends a signal to process that are SPECIFIED BY NAME instead of PROCESS ID	
+	    - only sends a signal with process name, nothing happens with pid
+              
+
+• pkill 
+
+          - same as killall
+          - but it also kills all processes that only partitially match the name.
+          - killall needs an exact match, while pkill will send the signal
+
+
+
+• cntrl + c  - SIGINT (sends signal interrupt)
+
+• cntrl + z - SIGSTP (sends signal stop)  it also backgrounds the process.
+	    - the stop signal doesnt end a program but temporarily pauses it (check ./process_states and stopped state)
+
+• cntrl + d - EOF (end of file) not a signal
+	    - tell the terminal that you're done typing (closes interactive shell)
+
+

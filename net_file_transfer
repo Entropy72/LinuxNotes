@@ -1,0 +1,71 @@
+FILE TRANSFER OVER THE NETWORK
+
+
+• scp - used to share files on the local network (secure as its over SSH)
+      - can copy from either machine 
+      - can work between OSs 
+
+       Usage:
+       	       <source> <destination>
+
+
+               On destination machine (pulling from the source):
+
+               scp <username>@<ip_address>:<path/to/source> <destination>
+            
+	       (eg) scp adminsmith@192.168.0.111:/home/adminsmith/test . 
+
+
+	       On the source machine (copying to the destination):
+
+               scp <source> <USERNAME>@<IP_ADDRESS>:<PATH/TO/DESTINATION>
+             
+	       (eg) scp . adminsmith@192.168.0.111:/home/adminsmith/test
+                       
+
+     Flags - `-r` - used to recursively copy a folder 
+
+
+
+
+• rsync - used to transfer files over the network
+        - only copies files if they have changed (can be used to keep files in sync)
+        - mostly uses ssh but can be used as a daemon version 
+          (this doesn't have encryption so it's faster and less secure)
+        
+ 
+     Usage - same as scp 
+ 
+     Flags - `-r` - used to recursively copy a folder
+           - `-v` - verbose. gives info on which files are being copied (to be kept in sync)
+
+
+
+
+• nc - netcat
+     - used to create tcp/udp connections
+     - mostly used to create a daemon to listen on a port, which then other system could connect to
+       and send data to
+     
+
+     Flags - `-l <PORT>` - the machine starts listening on that port
+                         - `nc -l 9999`
+                         - to connect to the host machine `nc <IP_ADDRESS> <PORT_TO_CONNECT>`
+       			 -  nc test 9999
+
+			 - stdin from both terminals would be transfered over. 
+                         - use Ctrl + C to end connection
+
+			 - `nc -l 9999 < file.txt` - this prints the output of the text file to any machine that 
+                           connects on port 9999
+  			 - `nc 192.188.8.2 9999 > file.txt` - this is a way to transfer from a file to a file using nc
+                         
+
+
+
+
+
+
+
+
+

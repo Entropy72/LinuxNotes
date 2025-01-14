@@ -1,0 +1,12 @@
+index='tools_DNS - is to see DNS setting using tools 
+
+(see what is in the files, using the tools)
+
+
+files_DNS - see the files
+          - and how to specify settings 
+
+
+read_DNS - finds and displays the records on the DNS'
+
+cat $index

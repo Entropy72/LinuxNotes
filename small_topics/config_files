@@ -1,0 +1,32 @@
+CONFIG FILES
+
+most config files are stored in either /etc or in the /home/user
+
+Running processes can be made aware of changes to their configuration files using the `systemctl reload <programname>`
+command.
+
+
+
+•WHAT ARE .RPMNEW OR .RPMSAVE FILES?
+
+
+In RHEL based distros if you have already made a config file for a program 
+or an old config file from a previously installed version of the program is present
+
+and you install the program, the new default configuration files that comes with the program will be saved in the normal
+place and have a `.rpmnew` extension
+
+however if there are new changes in the newly installed config file compared to your copy, you will have the option to 
+replace your copy with the new default config 
+
+and your copy will be saved in the same folder with a `.rpmsave` file extension.
+
+
+
+It's main purpose is to allow you to have a fallback option. The .rpmnew or .rpmsave files are usually deleted later
+
+
+.rpmnew  - newly installed config, that's not being used
+
+.rpmnew  - previously installed config, that is not being used
+

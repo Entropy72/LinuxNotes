@@ -1,0 +1,54 @@
+stream editor, with 'full'  programming capabilities.
+
+•Awk command and flags:
+	awk [command] [data]
+	-f - the -f flag allows for a awk program file to be run
+	-F[field seperator] - used to specify the field seperator ex. `-F:` or `-F;`
+
+•Loops and conditions:
+	•if statement:
+		if (condition) {action}
+
+	•for statement:
+		for ((i=)start, condition,(i=) increment) {action}
+		  - Only when the condition is true will the loop run.
+		  - `i` is the counter variable and is assigned to the start value and `i` is usually a field. 
+
+•Print:
+	•print - a simple print that doesn't process  control characters (\n,\t):
+	   `print x` OR `print "hello" x`  
+	•printf - a more complex print that does process the above:
+	   `print "%s is the best %s in %d place and wins £%f \n",name,profession,place,prize`
+	      %'x' - a place holder for a variable in a print statement
+              %s - strings, in awk floats and numbers are also strings
+     	      %d - integer, %f - decimal float (%0.2f - truncates to 2dp), %% - literal percent
+	•sprintf - this doesn't print to the screen 
+	         - used to store formated strings in variables so that they can further processed. 
+
+•Built-in variables of awk
+	• NF (Number of Field) - variable representing the total number of fields in that line. 
+	• NR (Number of Records) - variable representing the record number in awk. ex. $NR
+	• FS (Field Seperator) - can be specified in flags or in the command and can be changed throughout the code
+	   - ex. FS=":"  (when FS is specified in code)
+	   - When FS is specified it only applies to subsequent lines and not to the current line. 
+	   - $0=$0 is a workaround that can be used to force awk to apply the field seperator. 
+	   - It may be best to write in the BEGIN block as this is applied globally and works on all lines directly. 
+	• OFS (Output Field Seperator) - seperates fields in output (print) of awk commands. ex. OFS=":"
+	
+
+•Regex:
+	• /regex/ - regex must be in between the forward slashes
+	• `~` - means matches the expression ex. if (x ~ /hello|hi/) {print "hello to you too"}
+	• `!~` - means doesn't match the expression. ex. if (x !~ /hello|hi/) {print "fugge off too"}
+	• for more information on regex in a more general use check the .sedinfo in the .hidden
+
+•Built-in awk functions:
+	• length(string) - returns the total number of characters in a string. Can use variables instead
+	• sub(find,replace,in_this_string) - sub is used for substitute. 
+	    - The last parameter `in_this_string` is not necessary as if not specified $0 is taken as the string.
+	
+
+•Awk Shorts:
+	• $0 - this is equivalent to the entire line (or whtevr the delimeter for records is)
+	• base.txt - a text file (made by me) with the general format of awk programs. 
+	•

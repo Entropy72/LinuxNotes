@@ -1,0 +1,71 @@
+regex - \b - border (instead of space - less than a space) between number, letter and everything. (only gnu sed)
+      - | - or 
+      - () - capturing group - can be referred (backreference) to in the replace. makes no difference to search
+      - [] - character class eg.[1-9],[A-Za-z],[aB],[[:punct:]] one of any of characters in the brackets
+           - matches one of the letters in the brackets. Can use a quantifier.
+      - {m,n} specifies number of characters in prev (quantifier), can use *,+,? instead
+      - [:x:] - character set eg, [:punct:],[:alpha:],[:cntrl:] enclosed in a character class (in double box 
+                brackets)
+      - ^ - start of line aka line starts with eg. /^$/ - blank line, /^#/ - comment 
+
+
+
+ 
+sed commands
+ 
+     - '/search/d' - deletes matched LINE (substitute for individual word deletion). skips over all sed commands for 
+        this line and goes to the next line.
+     - 's/search/replace/i' - case insensitive for search
+     - 's/search/replace/p' - explicit print for that line. useful with -n flag
+     
+     - H - adds a new line. appends patterns space to hold space
+     - pattern space - where sed executes sed code on a single line (replaced for each line - short term)
+     - hold space - empty unless written to (long term)
+  
+     - x - switches hold space and pattern space
+     - N - appends the next line to pattern space, and keeps the /n. 
+       It also seems skip over the line appended to pattern space so that line appended is not processed again.
+     - G - adds a new line. then appends hold space to pattern space.            
+   
+    
+  :target occurence - 's/search/replace/g' - g substitute all matches in a line
+                    - 's/search/replace/2g' - substitute all matches from the second match in a line (including 2nd
+                       match), without g (just a number) only substitutes that nth match
+                    - 's/search/replace/2' -  g only substitutes that nth match
+                    - *can be used with p and i to specify and target specific words.
+                    
+                    - `condition {sed}`  OR   `/condition/ {sed}`    (place condition in // if it uses regex)
+                     eg. 
+
+   
+  :ranges - 5,$ {sed command} - only acts on lines 5 to the last line.
+           - 7 {sed command} - only acts on seventh line
+           - 3,9 ! {sed command} - acts on all lines except lines 3 to 9 
+
+
+
+sed shorts - $ - last line (ubiquitous) - for specifing ranges (outside of the command  $ {s/find/replace}))
+           - $ - end of line (when used in a command eg. 's/$/BYE/')
+           - 1 - beginning of file
+           - ^ - beginning of a line ('s/^/HI/')
+	   - & - often used in replace. It is equivalent to what is matched by search. eg `s/[Hh]i/(&)/` 
+           - ; - seperates seperate sed commands  (a \n newline also seperates commands)
+             all commands act on a single line unless the cycle is broken (with d or smth)
+	   - 's/search/replace/2' - substitute a second match in a line (including 2nd match), without g (just a 
+              number) only substitutes that nth match
+           - {sed command} - when a condition is present (eg. ! or 3,$) use curly brackets 
+
+sed flags (gnu) - sed [command] [input] [optional more input ex. file.txt] [more optional input]
+		- -r - extended regex
+		- -i - overwrites files with sed output
+                - -n - no printing unless speicified in sed code (sed otherwise always prints patterns space by 
+                       default)
+		- -f - takes in a file as program file to run
+
+*******************************************************************************************************************
+
+examples : make everything on a single line - ` sed -n '{H} ; $ {x;s:\n::g;p}' `
+         : explanation -  {H} - append every line to hold space, append pattern space (that line) to hold space. 
+                       - `$ {x` -  if the last line, swap pattern space and hold space.
+                       - 's:\n::g' -  remove ALL (using g in substitute) newlines (\n) in pattern space.
+                       - now only print pattern space (due to -n flag)  

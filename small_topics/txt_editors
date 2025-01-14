@@ -1,0 +1,15 @@
+vim
+
+• :! <command> - can run any linux command inside the terminal!
+• :e! - reverts to the last saved format, doesn't close file 
+• :help - help screen
+
+
+nano
+
+• ctrl+o and ctrl+x  -  save and exit
+• ctrl+6 - to select text
+• alt+6 - to copy
+• ctrl+u - to paste
+• ctrl+k - to cut
+

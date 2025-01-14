@@ -1,0 +1,26 @@
+TOOLS TO HELP MONITOR AND VIEW STORAGE USED BY THE SYSTEM
+
+
+• df - shows the file system space usage and mountpoints
+     - shows the space used by each partitionn and block device
+    
+     Usage:  
+		- `df` or `df <partition/block device>`
+
+
+     Flags: 
+		- `-h` - human readable. js use it.
+     
+
+• du - shows the storage of individual files and folders
+     - shows the disk used by all files and folders recursively from pwd (unless flags or args are specified)
+      
+
+    Usage:
+		- `du` 
+		- `du -h -summarize <file/folder>`
+
+    Flags:
+		- `-h` - human readable
+                - `summarize` - doesn't display file sizes recursively 
+                              - and only shows the size of pwd (if no arguments specified) or args

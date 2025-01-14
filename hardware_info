@@ -1,0 +1,19 @@
+lspci - lists pci devices
+      - nvme (~4 lanes) 
+      - network card (~1)
+      - gpu (~16 lanes)
+
+lsusb - lists usb devices
+      - internal usb devices as well
+      - mice/keyboard
+      - inbuilt webcam 
+      - fingerprint sensor
+
+dmidecode - displays the dmi table (or SMBIOS)
+          - made at manufacture and doesn't scan hardware or account for hardware changes (better for laptops)
+          - not fully accurate and prone to state max regardless of whethever this is actually supported
+          - the dmi table is linked to the firmware and is not linked to any OS. (can be read without OS)
+
+
+lshw - more accurate than dmi table as it scans the hardware live
+     - not in syllabus  

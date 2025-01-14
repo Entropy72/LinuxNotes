@@ -1,0 +1,95 @@
+HOW TO DOWNLOAD PACKAGES
+
+   Redhat based distros use .rpm files for their packages and Debian based distros use .deb files for
+ 
+   The packages were downloaded and then installed using the installers for the packages
+
+
+• rpm - for installing downloaded packages on RHEL based systems
+
+• dpkg - for installing downloaded packages on Debian based systems
+
+   Use the `-i` flag to INSTALL the packages for both rpm and dpkg (pretty much the main thing to use them for)
+
+   This is the generally outdated way to do stuff, as while rpm and dpkg both show the required dependencies, they do 
+   not install them. the user has to go and find and install the necessary dependencies and the required dependencies 
+   of those dependencies.
+
+   if or when all the dependencies are there and available, the package will be installed with rpm and dpkg.
+
+
+• PACKAGE MANAGERS
+   
+   A package manager is a program that has an online repository of packages and their dependencies so that you dont 
+   have to be in a loop searching for them. it automatically gives you an option to install the package, and downloads 
+   all dependancies required.
+
+   It keeps a list of all the packages downloaded so that it only gets unavailable dependancies.
+  
+   Since these package managers have access to the repos they can download files directly from the repositories (if they
+   are available)
+
+
+    • yum - older RHEL package manager.
+
+    • dnf - the newer RHEL package manager. (has features to rollback)
+   	  - you can rollback to before you installed the package. it removes the package AND the dependencies installed.
+
+
+           subcommands for rpm (redhat package managers):
+
+		  • install <package_name (can be short)> - used to install the downloaded package on your system
+							  - used to download packages that are available in the repos  
+
+		  • history - shows the history of the packages, installed, upgraded and uninstalled with dnf
+			    - you can specify the history of a specific package
+
+		  • history undo <change_number or package name> 
+                                - is used to rollbacks the changes made in that change ver. the change number can be 
+				  viewed using `dnf history` 
+
+ 				- undoes all the changes made and removes all dependencies installed WITH the package.
+				  (only when the change was to install a package) dependencies for that package that 
+				  were installed before are left as it isnt part of that change number. it can undo 
+				  updates and deleted files as well.
+								 
+		  • update - used to update all the packages in the system. it can be used for a specific package too.
+
+		  • upgrade - used to upgrade the entire system (aka deletes obselete packages as well as updating 
+			      others), to ensure that the system is level 
+
+ 		  • search <criteria> - shows the available packages with the search criteria in the name or description
+ 
+ 	          • autoremove - cleans up the system by removing unused libraries and repositories
+  
+
+
+   For debian based systems we use apt or apt-get. apt is newer.
+ 
+    • apt - the  debian package manager, has a few subcommands
+	  - on debian the package manager doesn't automatically refresh the local cache of available packages from the
+	    repositories, like it does in SUSE or RHEL. You need to manually refresh it using apt update.
+	
+
+            SUBCOMMANDS:              
+
+		  • update - updates the YOUR LOCAL COPY OF THE REPOSITORY to have the latest versions
+
+		  • upgrade - updates all the packages (or a specified one) to the latest version.
+
+		  • disk-upgrade - upgrades the entire system to a new level removing obselete packages and updating the
+				   the used ones.
+                                 - can be a bit dangeruous as those "obselete packages" might be used by you
+
+		  • search <criteria> - shows the available packages with the search criteria in the name or description
+
+		  • install <pkg name> - installs a downloaded package OR downloads and installs a new package from repo
+
+		  • autoremove - cleans up the system by removing unused libraries and repositories
+
+		  • info <package name> - shows information (size, sources, description) about a specific package.
+
+   For SUSE Linux we use zypper for package management. It installs and manages rpm files (same as RHEL distros) but it 
+   has a different package management tool.
+
+    • zypper - the package manager for SUSE linux, it's manages the rpm files from it's repositories.

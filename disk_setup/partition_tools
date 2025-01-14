@@ -1,0 +1,31 @@
+PARTITION TOOLS
+
+CHECK OUT THE disk_setup FILE AS WELL
+
+
+• HOW TO OBTAIN INFORMATION ABOUT PARTITIONS
+
+  • blkid - is used to find the UUID, fs
+          - needs root permissions
+
+  • lsscsi - is used to list the storage devices (regardless if they are scsi or not)
+           
+  • lsblk - lists block devices (files) and partitions as well
+          - lists file system for each partition
+          - includes loop files for snaps as well as partitions bc both are block 
+          - `lsblk | grep -v loop` - might help
+
+
+
+
+
+ • partprobe - inform the OS of partition table changes
+             - used when changes are made to the partition table (eg. using gdisk or parted)
+
+
+
+
+
+
+
+

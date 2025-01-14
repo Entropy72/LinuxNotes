@@ -1,0 +1,40 @@
+HOW TO READ INFORMATION ON YOUR DNS
+
+
+• dig   - displays DNS entries
+	- finds out the IP address of a given domain by looking through sources
+        - looks in cache first tho (resolvectl flush-caches to clear the cache)
+	- same format as actual name records
+
+  
+      Flags:
+             - `-x` - the dash x flag does a reverse lookup (finding domain name from IP address)
+
+
+
+• resolvectl query - a subcommand of resolvectl 
+                  
+
+
+
+• nslookup - name server lookup
+	   - does reverse lookups automatically (without flag)
+
+	Flags: 
+		`-type=<record type>` - used to find specific dns records (other than A records)
+				      - mx is for mail exchanger and cname for aliases 
+
+
+
+• host - same as above lol
+       - short and sweet, IPv4, IPv6 and mail exchange record and done
+
+
+	Flags:
+		- '-v' - verbose, lots of junk data
+
+
+• WHOIS - query registars for contact information of a the owner of a domain
+        - shows the address, phone number and other stuff of the domain owner
+
+	- ppl often use a proxy to put their information instead and as such the owner's real info isnt there

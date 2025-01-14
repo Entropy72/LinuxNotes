@@ -1,0 +1,55 @@
+SSH
+
+•HOW TO ACCESS A REMOTE HOST WITH PRIVATE KEYS
+
+  - this can be used to avoid typing in the password of the other machine every time
+
+
+  - make a public-private keypair using 
+  
+    • ssh-keygen
+    - keypair is stored in the home folder in the .ssh hidden folder
+    -
+
+  - move the public key to the remote server so it recognizes the private key on connection
+  
+    • ssh-copy-id <user@machine> 
+
+
+  - known_hosts file - stores details and pubkeys of all the hosts that your system has connected to.
+  - authorized_keys file - stores the pubkey of all systems that can connect using private keys
+  - config file - is the local user config file that overrides system defaults
+
+
+• SYSTEM WIDE CONFIG FILES 
+
+  - in /etc/ssh:
+                - ssh_config - system wide ssh client settings
+                - sshd_config - system wide ssh host (daemon) settings. only there if ssh server is installed.
+
+
+
+• SSH-AGENT
+  
+  - ssh-agent is a ssh utility used to repeatedly connect to remote machine without putting in the passphrase for your 
+   private key. (if you have set up keypairs and it put a password on your private key)  
+  - it does this by storing your private key open in memory
+ 
+ • How To Set Up SSH-AGENT
+  
+   - run ssh-agent and run it's output (the output when run, adds the environmental variables needed)
+   - or run `eval `ssh-agent``, (eval automatically runs the output of a command)
+  
+
+  - then run ssh-add
+  - ssh-add is used to open your private key in memory. It adds the default private key. 
+
+
+  - `ssh-agent -k` is used to kill the ssh-agent program
+
+
+
+
+
+
+  

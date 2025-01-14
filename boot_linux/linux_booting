@@ -1,0 +1,62 @@
+bios is the firmware in the ROM, BIOS is the actual things. Terminolgy used here. Probably incorrect as only BIOS exists
+
+1.BIOS/UEFI
+2.POST
+3.Bootloader
+4.Kernel + initrd
+5.Root file system - all files in /
+6.systemd - the first process
+*simplified model
+
+
+
+•BIOS/UEFI - the first thing the motherboard goes to when turned on. (The ROM)
+•POST - the Power On Self Check - runs on startup to check for basic device health. The BIOS/UEFI starts this.
+
+
+•Bootloader - the bootloader (ex. grub2,Windows boot loader) is stored on the HDD. Used by UEFI/BIOS to load the OS.
+
+   
+   •BIOS - only a single bootloader can be stored in the MBR - the first HDD sector (512 KB)
+         - you can boot multiple OSs from a single HDD with BIOS using a bootloader like GRUB. Ex..
+         - A dual boot linux + windows would work with a single GRUB bootloader which would chainload the extra windows 
+           bootloader stored in the windows partition (not MBR)*
+        
+	 - This is a unique case and the previous OS's bootloader is deleted by the next installed OS for BIOS systems.
+
+
+   •UEFI - bootloader is stored in the ESP (EFI system partition - existing in all systems with a UEFI bios).
+           
+	    - UEFI allows the user to choose which bootloader to use in the UEFI manager (the bios thingy). 
+            - Mulitple ESPs or multiple bootloaders in a single ESP allow booting multiple OSs from the same hard drive. 
+              (As different OSs may need different bootloaders ex. Ubuntu and Windows)  
+            
+	    - Stored in a GPT (GUID Partition Table).
+
+            - In UEFI the path to the bootloader is stored in ROM, leading to the actual bootloader, which links to a 
+              OS. Writing the bootloader path to ROM is done by the OS at installation. **
+
+
+            
+
+•Chainloading - the process that occurs when a bootloader loads another bootloader which may finally boot the OS.
+              
+   EX.        - this occurs in UEFI when GRUB is the main bootloader and the user chooses windows as the OS so grub 
+                launches the windows boot loader. 
+              
+              - in BIOS chainloading also occurs. See BIOS* in bootloader  
+              
+              - this is not chainloading - where you live boot into a linux system with a broken bootloader. The live 
+                boot usb loads its GRUB bootloader which allows the choice of OS through its menu. So the live GRUB 
+                bootloader boots the linux on the system if you choose it. 1 bootloader only is used. Liveboots do not 
+                alwsys use GRUB as it maybe overly complex for loading just an ISO.
+              
+              - Ventoy allows for multiple OSs on a single pendrive. It shows a menu which allows you to choose which OS
+                to boot. It only displays the menu and then chainloads the ISO using the ISO's own (not necessarily GRUB                ) bootloader. 
+              
+              - When using Ventoy for the first time on the system, it must write it's path to the UEFI. see UEFI**
+
+
+
+
+

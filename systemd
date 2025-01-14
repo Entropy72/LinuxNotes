@@ -1,0 +1,129 @@
+INTRO 
+
+      A lot of files and programs must be started to get your system up and running for you to use it.
+      Like graphics, network, inter application communication, lots of stuff.
+
+      The systemd starts all of the necessary stuff up. And is the first process to start after the kernel starts.
+
+      systemd is a daemon and is managed using the systemctl command
+
+
+UNIT FILES
+
+     Unit files are files unique to systemd and is how you set up services to run with systemd on boot
+     Unit files are the stuff that systemd runs and manages
+     they include .mount files, .service files, .target files and .timer files
+
+
+  SERVICES
+
+
+      All of the small programs systemd needs to ready the machine are called services. and are run from by systemd 
+      using .(dot)service files
+
+
+      There look like config files and give systemd the path to the actual programs. and required conditions for the 
+      program to run.
+
+
+  TARGETS 
+
+
+      Then there are .(dot)target files, they start a group of services.
+
+      Targets can be used to specify all the services required to run the whole system.
+      So just running one target gets the whole system up.
+
+      Targets however can be used for smaller things too and not set up the whole system, but instead just combine 
+      multiple services.
+
+      There is a graphical target, multi user target or rescue target that calls the services for the system to be in a 
+      graphical, multi user or rescue mode.
+
+
+systemctl setdefault 
+
+
+~/.config/systemd/user - applies to only that user and holds priority over the rest
+
+/etc/systemd/system/ - priority over /run - copy files from usr/lib/ to /etc/systemd/ to modify them. and avoid system 
+                       updates
+
+/run/systemd/system/ - priority over /usr/lib.
+
+/usr/lib/systemd/system/ - main system services provided by the distro. is changed during updates. 
+
+=====================================================================================================================
+
+systemd servies. how to make them
+
+Make them in the directories listed above. Try to use ~/.config/systemd/user for services that apply to only a single user
+
+[Unit]
+Description= This is a service
+Requires= services
+
+#a wider range than just the service itself
+
+
+[Services]
+ExecStart= a single command, path to program or shell script
+ExecStop= by default kills the process (if not specified). or a else a single command, program or shell script
+
+#what to do when `systemctl start process.service` or `systemctl stop process.service` is run
+#The service itself
+
+[Install]
+#to specify if a service is enabled. (start automatically on boot). disable is the default.
+
+=====================================================================================================================
+
+SYSTEMCTL
+
+      used to manage the systemd daemon.
+      use the subcommands for systemctl
+   
+      `systemctl status <process (eg apache2)>` - doesn't require sudo
+                                                - gives details on if the process is running or enabled, PID, resource 
+                                                  usage, where the program file and service file are
+
+      `systemctl start/stop <process>` - used to start or stop a process
+                   /restart            - runs execstart/execstop from the service file
+                                       - only runs for this session (not through reboot)
+				       - restart stops and starts the services
+    
+      `systemctl reload <process>` - used to reload the CONFIG files of that specific service.
+				   - usually used first over `restart` when a change is made as it doesnt reload the 
+				     files if they are faulty and keeps the service running
+
+      `systemctl enable/disable <process>` - specifies whether or not to start process on boot
+					   - when enabled it:
+					   - creates a symlink to in the folder "./multi-user.target.wants"
+                                           - so process stored here probably run on boot when using multiuser mode
+
+
+      `systemctl mask/umask <process>` - when mask is used, a service file for it that is a symlink to /dev/null 
+                                         is created
+				       - mask disables process from starting on boot
+                                       - and process doesn't run when the start command is used
+                                       - use umask to unmask the service  
+                                       
+
+      `systemctl daemon-reload` - ensures that systemd is upto date with any changes made in the systemd folders to the
+				  UNIT files and the SERVICE files. the config files of a specific process will not be 
+				  reloaded.
+
+      
+
+
+ 
+`systemctl --user status <process.service>` - this displays the status of process.service for a service in the 
+                                              ~/.config/systemd/user directory.
+
+`systemctl status <process.service>` - this displays the status of the process.service but can be used for other unit 
+                                       types as well. This only works for system wide services.
+
+
+
+
+**2 systemds, 1 uses super important system services files, other user service files

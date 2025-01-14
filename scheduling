@@ -1,0 +1,90 @@
+SCHEDULING 
+
+
+• at - used to run a command at a single specified time once.
+     - run the at command specifying the time. type in the command to be executed in the interactive shell. 
+       close the interative shell and set in queue with Ctrl+D.
+
+   Usage:
+         
+          - `at tomorrow` - commands run in the interactive shell will run 24 hours from then.
+          - `at now +5 hours` - runs in 5 hours 
+          - `at 18:00` - runs at 6pm today
+          - `at 18:00 27 August 2024` - yeah runs then ;-)
+     
+   Subcommands:
+
+          - `atq` - (at queue) shows the list of jobs to be run with at
+          - `atrm <job number> - removes a job from the atq. It won't be run
+
+
+• cron - the cron daemon is used to repeatedly run a task
+       - the cron daemon is enabled in systemd
+       - we don't have to use the cron command afaik since cron is automatically run when the file is edited.
+       - the cron daemon reads the the stuff in the files given below
+
+
+       - /var/spool/cron/crontabs/<user> - in the /var/spool directory, all user crontab files are stored 
+                                         - edit them with the `crontab -e` command for syntax checking
+                                         - the commands are run as the user
+
+
+       - /etc/crontab - this is the main crontab file which is the system cron tab.
+                      - this file shouldn't be edited directly
+                      - if you need to make a system cron task make a file in the /etc/cron.d/ folder
+                      - runs the cron.daily, cron.hourly... directories
+                      - in some systems this may be handled by systemd timers instead
+
+
+       - /etc/cron.d/ - stores files that run as a line system in the /etc/crontab
+                      - make a file here instead of editing a the system crontab file
+
+
+
+       - /etc/cron.daily/, cron.hourly/ .... - store scripts or commands in these directories
+                                             - they run at the specified intervals
+                                             - the timings for each are specified by default in the crontab file
+   SUB COMMANDS                                          
+      
+           • crontab - this command is used to edit the user crontab files
+                     - `crontab -e` - opens the user who ran the command's crontab file in /var/spool
+                     - `crontab -u <user>
+
+   • SETTINGS A SCHEDULE
+
+        - type the following line into a user cron file (files not in the etc directory)
+
+     .---------------- minute (0 - 59)
+     |  .------------- hour (0 - 23)
+     |  |  .---------- day of month (1 - 31)
+     |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+     |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+     |  |  |  |  |
+     *  *  *  *  * command to be executed
+    
+
+        - this syntax is for user cron files
+
+        - 10 5 * * 1 mv itro itro2  - moves itro to itro2 every monday at 5:10am
+
+        - 0,30 * * * mv itro itro2 - moves itro to itro2 every half an hour
+           - use comma for two values
+
+        - */30 * * * mv itro2 itro - moves itro2 to itro every half an hour
+           - use */<value> to schedule smth every 5 or 10 min or every 2 or 3 hours
+           - use - to specify ranges
+
+
+     *  *  *  *  * <username> <command to be executed> - this is the syntax for system cron files 
+                                                       - username must be specified
+                                                       - can write a user cron in the root's cron file as well 
+        
+
+
+
+• systemd timers 
+
+     - you can probably create a systemd timer file to mimic cron or at
+     - fedora probably uses this to run the cron.daily and cron.monthly .. files
+           
+

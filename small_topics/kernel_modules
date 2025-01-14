@@ -1,0 +1,28 @@
+MANAGING KERNEL MODULES	
+
+
+• the linux kernel has a modular structure. so that for each machine and use case we can add or remove exactly what 
+  base functionality that we need.
+
+• modules are often things like file system drivers and other drivers.💀     
+
+
+• lsmod - lists out all the currently loaded modules (from the /proc folder)
+
+• rmmod <module name> - unloads a module from running 
+
+• insmod <module path> - inserts a unloaded module into the running state. they usually live in the /usr/lib/modules/ 
+                         subfolders.
+
+• modprobe <module name> - inserts an unloaded module into the running state, without need to know the whole path. 
+                         - it also loads all the necessary dependancy modules that this module needs to load succesfully
+
+• modinfo <module name> - shows information about that module (description, author, alias, dependencies)
+
+
+
+
+
+
+
+

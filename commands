@@ -1,0 +1,23 @@
+• ln - used to make symbolic and hard links. Hardlink is the default
+    
+ Usage - ln <SOURCE> <LINK_NAME>
+ 
+ Flags - `-s` - used to make a symbolic links.  
+
+
+
+• readlink - used to find or trace symbolic links
+
+  Flags - `-f` - used to find absolute path (usually used)
+
+
+
+• cp - used to make copies of files in a system 
+
+  Usage - scp <SOURCE> <DEST>
+
+  Flags - `-r` - used to copy recursively (when copying directories)
+
+
+•
+

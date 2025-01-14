@@ -1,0 +1,13 @@
+LOGGING TOOLS
+
+Most log files are stored in the /var/log/ folder
+
+
+• dmesg - logs kernel information (especially during startup)
+        - shows the removal and adding of kernel modules
+
+        
+
+• journalctl -
+
+• syslog -

@@ -1,0 +1,12 @@
+FILE METADATA TOOLS
+
+• file
+
+     - file is a tool used to display the file type.
+     - eg. directories, ascii files, unicode files (UTF-8)
+
+• stat
+
+     - stat is used to see information abt a file
+     - eg. modified times, changed times (metadata change), access times
+     - permisions, block and inode number and other stuff

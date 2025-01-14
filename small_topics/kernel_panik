@@ -1,0 +1,23 @@
+Kernel panic usually occurs when:
+
+a process changing run-levels* 
+missing or corrupted drivers
+a hardware issue
+software changes (ex. kernel without necessary modules (eg drivers))
+
+This is equivalent to a BSOD in windows.
+It prevents booting of the machine
+
+*A run level is the complexity level at which a machine is running
+ex. single user mode (no networking)
+    multiuser mode (+- networking)
+    recovery mode 
+    graphical 
+    shutdown or reboot
+
+
+
+
+
+
+

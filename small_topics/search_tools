@@ -1,0 +1,65 @@
+SEARCHING FOR FILES
+
+
+
+• locate - searches a database of files /var/lib/locate/locate.db
+         - searched by file name 
+         - `-r` flag to use with regex          
+
+         - the database needs to be kept updated
+
+               • updatedb - needs to be run to update the database
+                          - updatedb is usually run daily from a systemd.timer(8).
+
+         -  tends to be faster than find as it searches the database and not the entire filesystem
+         -  locate tends to be used as its variants mlocate and plocate most of the time
+
+
+
+• find - searches the filesystem for specified parameters.
+       
+   Usage:
+
+       - find <search place> <flags> <search expression>
+
+       - find / -type f -name "*itro*"     - searches in root. for a file. that has `itro` in it's name.
+                                           - if no search place is set then, pwd is starting search place
+
+
+   Flags:
+
+       - `exec command {} +` - executes the command on all the found files. {} is a placeholder for the file name. + is 
+                               for termination.
+       - `-E` - extended regex
+
+     
+   Filters:
+
+      - `-name` - name of files. case sensitive. `-iname` for case insensitive
+      - `-type` - files or directories (type f or type d)
+      
+      - `-mmin -10 -mmin +5` - files modified in the last 10 min. and files modified before 5m ago.
+      - `-mtime` - same as mmin but in days
+      - `-amin` `-cmin` - for access and changed time is also there
+
+      - `-size +5M` - files bigger than 5M
+      - `-empty` - for empty files 
+      - `-perm  777` - files with permissions 777
+      - `maxdepth 1` - only searches down present directory and not deeper
+
+
+• grep - can be used to search the contents of files
+
+   Usage: 
+    
+        grep -rnw <starting directory> -e <pattern> 
+
+   Flags: 
+
+        -r: Recursively search subdirectories.
+
+        -n: Display line numbers for matched content.
+
+        -w: Match the whole word (optional, depending on your search needs).
+
+

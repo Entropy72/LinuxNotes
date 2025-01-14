@@ -1,0 +1,104 @@
+FIND PROCESS ID
+
+
+• pidof
+         - finds the pid of a running process
+
+      Usage:
+                - `pidof <process_name>`
+                - needs an exact match, or nothing will be returned
+
+
+
+• pgrep
+
+        - same as pidof, tho like pkill it doesnt need exact match
+
+
+
+• lsof
+
+        - list open files
+        - lots of stuff
+        - ports are files 
+       
+  
+     Flag: 
+            - `lsof -u <user>` - shows process for that user
+            - `lsof -i` - shows open ports
+ 
+
+       
+
+• ps 
+
+       - used to show the list of running processes at that point in time
+       - it shows pid, cpu usage, ram and stuff
+       - sorts by process id
+     
+     Flag:
+	    - `ps aux` or `ps -ef` - commonly used standards to view the running task
+	    - `-l` - to see nice value            
+
+
+
+
+• top
+
+       - used to show list of running process live 
+       - shows nice value under NI
+     
+       
+       - sorts by CPU usage
+       - can use < or > to change what it sorts by 
+       - use Ctrl + R to reverse sort order
+
+
+       Flags: 
+              `-p <PID>` - shows the details for that process only 
+
+
+• htop
+
+       - a better top
+       - shows uptime, threads, graphs, and everything top does 
+       - let's you use mouse TO SORT WOOHOO
+       - you can kill process directly from htop. woohoo
+
+
+
+SETTING PRIORITIES
+
+  What Is Nice Level?
+
+      - a nice level is the priority level of a process
+      - determines it's right to system resources and cpu cycles
+      - it ranges from -19 to 19, with -19 the highest priority and 19 being the lowest
+
+      - the default nice level for a process is 0
+
+
+• nice
+
+      - used to START a process with a specific nice level
+
+
+      Usage:
+	     `nice -n <nice value> <process to run>`
+
+      Flags:
+    	     `-n` - is used to specify a nice value
+                  - it doesnt have to be done. eg -10 sets a nice value of 10. it is confusing without -n so use it
+                 
+
+
+• renice
+
+
+     - used to CHANGE the nice level of a RUNNNING process
+     - as a running process will already have a nice value
+     - no process can be given a higher nice value unless you have root priviledges
+
+
+     Usage: 
+	    `renice -n <nice value> <PID>` 

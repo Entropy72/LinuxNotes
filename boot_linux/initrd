@@ -1,0 +1,36 @@
+•INTRO
+
+  •The bootloader only boots the kernel and initrd; and not the entire system
+
+  •initrd or initramfs are used to mount the filesystem and get the system up, it loads all necessary drivers
+
+   •The disk image (initrd) or the cpio archive (initramfs) is specified in the grub menu entry.
+   •The file path is specified and is usually the path `/boot/initrd.imgblablabla` for both initrd and initramfs
+   
+   •Most OSs refer to initramfs (almost always used) as initrd.
+
+•SET UP
+
+initrd - a special block device (/dev/ram) that is mounted as the initial root file system
+       - it loads the initrd file into RAM and runs the commands to mount the actual root and filesystem
+       - the kernel must have a driver for initrd filesystem
+       - the initrd file is usually a disk image (ex. iso)
+       - the driver for the initrd disk image file system is necessary to load the initrd.
+
+
+initramfs - usually a cpio archive (compressed file type (eg. zip, tar))
+	  - the initrd file is loaded into RAM by grub (grub menu entry need initrd path) and uncompressed by the kernel
+	  - it loads the initrd file into RAM and runs the commands to mount the actual root and filesystem
+	  - it is an archive and not a block devices so it doesn't need an driver to understand the initrd filesystem.
+
+
+•COMMANDS
+
+  •mkinitrd - prev - used to make initrd
+            - now - calls dracut and makes initramfs 
+
+  •dracut - a tool used to build an initramfs archive
+          - dracut <initrd> <kernel version>     
+          - parameters not necessary, unless a initramfs for a non default file path name and kernel version is needed.
+
+

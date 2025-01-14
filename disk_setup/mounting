@@ -1,0 +1,86 @@
+HOW TO MOUNT A FILE SYSTEM 
+
+
+after partitioning and installing a filesystem
+mounting a partition makes it accessible to the user from the point it is mounted on
+
+aka you can access the entire partition from where it has been mounted
+you can only mount by partitions and not drives (unless you using lvm)
+
+
+    -    `lsblk` - prior to mounting 
+    -    `df -h` - after mounting (shows mountpoint too)
+
+
+• mount - used to manually mount drives
+   
+   Usage: `mount <device> <path/to/mountpoint>`
+        : `mount /dev/sdb /mnt`
+
+
+
+• FUSE - file system in user space
+       - doesn't need root permissions
+
+
+
+• umount - used to unmount drives 
+        
+     Usage: `umount <device>`
+            `umount /dev/sdb`
+
+
+
+FSTAB
+
+
+• etc/fstab - entries in the fstab file will be automatically mounted at boot
+            - what is mounted as the root (/) partition is specified here
+	    - you need to have root access to edit the file
+
+    
+	Usage: entries to the fstab file should be made in the order (written in the fstab in shorthand too)
+
+              <device> <mountpoint> <file_system type> <options (can say defauts)> <dump*> <fs_check**>
+
+              device - can be either UUID, path to device or device label
+                     - UUID is generated from the file system, and PARTUUID is generated from the partition
+
+              dump* - an outdated tool used to back up the partition
+
+              fs_check** - enables fs_check to be automatically periodically run on the partition
+			 - 0 - to disable that option
+                         - 1 - to enable it (and it's the root partition)
+                         - 2 - to enable it on a non root partition
+                         - this just allows fs check to be possible and doesn't actually do it
+
+
+
+SYSTEMD MOUNTS
+
+• systemd.mount
+
+    - systemd creates systemd.mount files that actually do the mounting after reading the fstab
+    - you can create them manually but it's recommended (and easier) to just edit fstab
+
+
+    - these .mount files are generated on boot in the /run/systemd/generator/ folder
+    
+    - to make a systemd .mount file directly :
+         
+         - go to /etc/systemd/system/ - where user generated files systemd files should be made 
+           (unless you are making them in your home dir `~/.config/systemd/user`)
+         
+         - create a file (name should follow rules to work)
+           name is based on the mountpoint (eg /mnt/drive3  ->  mnt-drive3.mount)
+
+	 - https://youtu.be/fspjhtUhlp4?list=PL78ppT-_wOmuwT9idLvuoKOn6UYurFKCp&t=999
+         - how the file is written, basic format
+
+
+DOUBLE MOUNTS
+
+   
+    - you can mount the same partition on different mount points and access them easily
+    - you can mount different partitions on the same mount point and would only have access to the latest one, however 
+      when that is unmounted you regain access to the older mounted partition

@@ -1,0 +1,5 @@
+MAC - mandatory access control. 
+
+SElinux is a MAC program used to control permissions with more authority than the user based permissions (changed using chown).
+
+Often used to control the permissions of programs to files (eg, the files ) 

@@ -1,0 +1,30 @@
+DNS TOOLS 
+
+
+
+• resolvectl - a systemd commands used to see some dns information
+
+	Subcommands:
+                     - `status` - shows the IP of the DNS servers that the system queries (from the /etc/resolv.conf)
+		     - it is the default subcommand of resolvectl
+
+
+		     - `flush-caches` - a subcommand to clear cache of previous resolved domain names
+                     - this ensures that the dns or files are queried instead of the checking the cache 
+ 
+
+		     - `query <domain name>` - displays dns records (like dig)
+
+
+
+• hostnamectl - shows the information abt the system
+              - hostname, OS ver, kernel ver, hardware model
+              - what the fuck
+	      - a systemd thing
+	      - you can change the hostname (`hostnamectl hostname <new_host_name>`)
+
+
+
+• hostname - displays just the hostname
+
+

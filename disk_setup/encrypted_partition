@@ -1,0 +1,57 @@
+ENCRYPTED PARTITION
+
+
+• cryptsetup 
+  
+          - this is the command to setup and manage encrypted partitions (has support for BitLocker and stuff)
+          - it is often used for LUKS encryption setup or plain dm-crypt encrytion 
+
+	  - the partition is encrypted using a passphrase and can only be accessed if the passphrase is given
+          - possible to use keys instead (you could store them on a seperate usb stick maybe)
+
+          - to access the partition you need to open it, whether for read or write
+          - the partition is now visible in /dev/mapper/<name>
+          - you can now mount it and it install a file system on it
+
+	  - close the device when you are done with it
+          - to open the device means everything is in RAM, so on shutdown, luks is automatically closed 
+             
+
+        
+     LUKS - Linux Unified Keys Setup 
+          - it has metadata headers that is visible and could be damaged but it has more features than dm-crypt
+
+    
+      Usage 
+
+            to create:
+            - cryptsetup <format> <partition>
+            - sudo cryptsetup luksFormat /dev/sdb1
+
+            to open:
+            - cryptsetup open <partition> <name>
+            - the name is what you see the partition as for the time it is open
+  
+	    to close:
+            - cryptsetup close <name>
+        
+          
+  
+    Automatically mount on boot
+
+            - to have the encrypted partition automatically mount on boot you need to:
+ 	      1. open the disk
+                    - create /etc/crypttab
+ 		    - make an entry for the disk:
+                           - <name> <UUID="uuid"> <-> 
+		           - the third field can be used to specify the keys so it can auto decrypt on boot. 
+                           - the `-` makes it ask the user for a passphrase during boot
+              
+	      2. mount it
+                    - make an entry in etc/fstab
+ 		    - check out ./mounting file for more details
+
+                     
+
+
+

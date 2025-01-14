@@ -1,0 +1,18 @@
+SANDBOXED APPS
+
+
+Sandboxed apps are like self contained programs, that contain their own dependencies and libraries so that they don't 
+cause any conflict on your system, if another package needs another version of a dependancy or library
+
+They also allow the developer to create a single program that works on all linux distros instead of making things like 
+seperate rpm and deb files.
+
+
+snaps are one type of sandboxed app mostly used on ubuntu (developed by canonical)
+
+flappacks are another type of sandboxed app that is usually used on RHEL systems
+
+
+both snaps and flappacks can be installed on any distro but you need to use the snapd daemon to install snaps
+
+and the 

@@ -1,0 +1,1844 @@
+this is a new note :.
+Compliling a package is making it into an executable for a program (like discord, firefox, kernel)
+
+The non-compiled package is usually written in C or C++ or Rust which is then converted into machine code by a compiler
+
+It is done instead downloading the pre-compiled version of the binary (from the app store of whatever)
+
+It is usually done to access newer versions of programs that are not pre compiled yet
+
+The final executable tends to be more personalised for the system and any may not build stuff that does not have supporting libraries.
+
+
+
+
+GNU Autotools (a collection of tools including compiling tools) can be used for compilation 
+-3 main tools (automake, autoconf, libsmth)
+- should be preferably be installed for easier compilation, each tool installed seperately
+
+
+(prev steps - not in syllabus)
+- originally existing ./configure.ac and ./Makefile.am present with the uncompiled program and made by the developer.
+- run `autoreconf -i` - calls autoconf and other GNU Autotools
+- this produces the ./configure file
+- alot of packages have ./configure file already made
+
+
+
+
+•./configure - a script file
+             - reads the configure.ac file (this is made by autoscan (included in GNU autotools))
+             - Makefile.am (dev) >> Makefile.in >> Makefile
+             - makes a Makefile  (no extension)
+	     - devs can already make a manual MakeFile and there is no need to run the ./configure script     
+
+
+•MakeFile - Makefile can be instructions to demostrating how to compile 
+          - or general purpose commands unrelated to compiling. Often targets are specified
+          - Targets are kinda like flags, and part of a specified program.
+      
+
+
+•make - GNU Make and not part of GNU Autotools
+      - reads the Makefile made by ./configure script and builds the executable   
+       uses a compiling program (the actual main compiler that creates a binary) (eg. gcc or rustc (cargo uses rustc)) 
+      - compiles the package and necessary available libraries; linking them together
+   
+
+
+•make install - installs the application in the correct location and directory 
+              - ex. programs >> /usr/bin, libraries >> /usr/lib,  
+              - a target (like a flag, part of the command) of make
+ 
+
+
+IN SUMMARY : ./configure
+             make
+             make install
+
+
+NOTE: wikipedia article on GNU Autotools has a really helpful table on all the steps 
+    : cmake is seems much easier and user friendly that our dear GNU Autotools 
+this is a new note :./compilation
+• ln - used to make symbolic and hard links. Hardlink is the default
+    
+ Usage - ln <SOURCE> <LINK_NAME>
+ 
+ Flags - `-s` - used to make a symbolic links.  
+
+
+
+• readlink - used to find or trace symbolic links
+
+  Flags - `-f` - used to find absolute path (usually used)
+
+
+
+• cp - used to make copies of files in a system 
+
+  Usage - scp <SOURCE> <DEST>
+
+  Flags - `-r` - used to copy recursively (when copying directories)
+
+
+•
+
+this is a new note :./commands
+this is a new note :./boot_linux
+bios is the firmware in the ROM, BIOS is the actual things. Terminolgy used here. Probably incorrect as only BIOS exists
+
+1.BIOS/UEFI
+2.POST
+3.Bootloader
+4.Kernel + initrd
+5.Root file system - all files in /
+6.systemd - the first process
+*simplified model
+
+
+
+•BIOS/UEFI - the first thing the motherboard goes to when turned on. (The ROM)
+•POST - the Power On Self Check - runs on startup to check for basic device health. The BIOS/UEFI starts this.
+
+
+•Bootloader - the bootloader (ex. grub2,Windows boot loader) is stored on the HDD. Used by UEFI/BIOS to load the OS.
+
+   
+   •BIOS - only a single bootloader can be stored in the MBR - the first HDD sector (512 KB)
+         - you can boot multiple OSs from a single HDD with BIOS using a bootloader like GRUB. Ex..
+         - A dual boot linux + windows would work with a single GRUB bootloader which would chainload the extra windows 
+           bootloader stored in the windows partition (not MBR)*
+        
+	 - This is a unique case and the previous OS's bootloader is deleted by the next installed OS for BIOS systems.
+
+
+   •UEFI - bootloader is stored in the ESP (EFI system partition - existing in all systems with a UEFI bios).
+           
+	    - UEFI allows the user to choose which bootloader to use in the UEFI manager (the bios thingy). 
+            - Mulitple ESPs or multiple bootloaders in a single ESP allow booting multiple OSs from the same hard drive. 
+              (As different OSs may need different bootloaders ex. Ubuntu and Windows)  
+            
+	    - Stored in a GPT (GUID Partition Table).
+
+            - In UEFI the path to the bootloader is stored in ROM, leading to the actual bootloader, which links to a 
+              OS. Writing the bootloader path to ROM is done by the OS at installation. **
+
+
+            
+
+•Chainloading - the process that occurs when a bootloader loads another bootloader which may finally boot the OS.
+              
+   EX.        - this occurs in UEFI when GRUB is the main bootloader and the user chooses windows as the OS so grub 
+                launches the windows boot loader. 
+              
+              - in BIOS chainloading also occurs. See BIOS* in bootloader  
+              
+              - this is not chainloading - where you live boot into a linux system with a broken bootloader. The live 
+                boot usb loads its GRUB bootloader which allows the choice of OS through its menu. So the live GRUB 
+                bootloader boots the linux on the system if you choose it. 1 bootloader only is used. Liveboots do not 
+                alwsys use GRUB as it maybe overly complex for loading just an ISO.
+              
+              - Ventoy allows for multiple OSs on a single pendrive. It shows a menu which allows you to choose which OS
+                to boot. It only displays the menu and then chainloads the ISO using the ISO's own (not necessarily GRUB                ) bootloader. 
+              
+              - When using Ventoy for the first time on the system, it must write it's path to the UEFI. see UEFI**
+
+
+
+
+
+this is a new note :./boot_linux/linux_booting
+•INTRO
+
+  •The bootloader only boots the kernel and initrd; and not the entire system
+
+  •initrd or initramfs are used to mount the filesystem and get the system up, it loads all necessary drivers
+
+   •The disk image (initrd) or the cpio archive (initramfs) is specified in the grub menu entry.
+   •The file path is specified and is usually the path `/boot/initrd.imgblablabla` for both initrd and initramfs
+   
+   •Most OSs refer to initramfs (almost always used) as initrd.
+
+•SET UP
+
+initrd - a special block device (/dev/ram) that is mounted as the initial root file system
+       - it loads the initrd file into RAM and runs the commands to mount the actual root and filesystem
+       - the kernel must have a driver for initrd filesystem
+       - the initrd file is usually a disk image (ex. iso)
+       - the driver for the initrd disk image file system is necessary to load the initrd.
+
+
+initramfs - usually a cpio archive (compressed file type (eg. zip, tar))
+	  - the initrd file is loaded into RAM by grub (grub menu entry need initrd path) and uncompressed by the kernel
+	  - it loads the initrd file into RAM and runs the commands to mount the actual root and filesystem
+	  - it is an archive and not a block devices so it doesn't need an driver to understand the initrd filesystem.
+
+
+•COMMANDS
+
+  •mkinitrd - prev - used to make initrd
+            - now - calls dracut and makes initramfs 
+
+  •dracut - a tool used to build an initramfs archive
+          - dracut <initrd> <kernel version>     
+          - parameters not necessary, unless a initramfs for a non default file path name and kernel version is needed.
+
+
+this is a new note :./boot_linux/initrd
+These are grub commands
+
+• grub2-install  -  installs grub2 bootloader. Used for setup, reinstallation and repair. (for bios only)
+                 -  install the grub2-efi package using a package manager for uefi systems. 
+
+
+• grub2-mkconfig -  builds the grub2 config file in /boot/grub/grub.cfg (file grub reads)
+		 -  based on the config files in /etc/grub.d/ and /etc/default/grub file
+                 
+                 -  /boot/grub/grub.cfg - BIOS systems, /boot/efi/EFI/grub.cfg - UEFI systems: 
+
+                 -  all edits to change grub2 should be done in the /etc/ files not the config in /boot/
+		 -  run this after making any changes to the files in etc to rebuild the /boot/ config.
+
+                 - to run the command manually use `grub2-mkconfig -o /boot/grub/grub.cfg` 
+                 - `-o` is to write to file and not standard output. The file to be written to must be specified.
+
+
+• grub2-update   - this is not a grub2 command but a shell script provided by the OS
+		 - it runs `grub2-mkconfig -o /boot/grub/grub.cfg` 
+                 - this is usually run instead of manually updating grub. This script is not automatically run.
+         
+                 - can also be known as `update-grub2` or `grubby` and may vary between OSs.
+                 - edit: while the syllabus says grub2-update, there seems no one who uses that name.
+
+
+
+How to change settings for grub
+
+• /etc/grub.d/40_custom - for adding new menu entries
+
+• /etc/default/grub - for changing menu timeout and other stuff
+
+• grub menu - press e to edit the the menu options directly. only a one time boot.  
+
+
+
+Making menu entries
+
+ •INFO
+
+   • Menu entries are the choices you have to boot into when booting and the grub menu shows up.
+
+
+   • All custom menu must be added here /etc/grub.d/40_custom 
+   • Usually OSs and linux kernels menu entries (from package manager) are automatically added by grub2 during 
+     installation or package upgrades.
+
+   • Manual menu entries are only added when linux kernels are not installed from a package manager 
+   • Or when the user wants to change the name or setting of how a kernel or OS boots.
+   • (eg. single user mode, name of Menu Entry, read only, splash)
+   • User can have a new menu entry (multiple) linking to the same OS or kernel or just edit the existing menu entry.
+
+
+ • ADDING OR EDITING AN ENTRY
+ 
+   • For one time boot with different settings than /boot/grub/grub.cfg press `e` on the selected boot entry in the grub     menu. 
+  
+   • This goes into editing mode and allows changes to be temperorily made to the data in the grub.cfg for that single 
+     menu entry for a single boot. (can used for rescue or repair) 
+
+  
+   • Adding a basic menu entry to 40_custom:
+  
+   • menuentry "Name"  {     		    - specify name of menu entry
+     set root=(hd0,1)                       - specify disk and partition for /boot. hd0 is first drive. 1 is first 
+                                              partition
+     linux /boot/vmlinuz                    - specify kernel path. specify root partition with root=uuid or root=path 
+                                              as a flag.
+     initrd /initrd    }            	    - specify initrd or initramfs path
+
+
+
+
+
+
+this is a new note :./boot_linux/grub2
+SANDBOXED APPS
+
+
+Sandboxed apps are like self contained programs, that contain their own dependencies and libraries so that they don't 
+cause any conflict on your system, if another package needs another version of a dependancy or library
+
+They also allow the developer to create a single program that works on all linux distros instead of making things like 
+seperate rpm and deb files.
+
+
+snaps are one type of sandboxed app mostly used on ubuntu (developed by canonical)
+
+flappacks are another type of sandboxed app that is usually used on RHEL systems
+
+
+both snaps and flappacks can be installed on any distro but you need to use the snapd daemon to install snaps
+
+and the 
+this is a new note :./sandbox_apps
+this is a new note :./small_topics
+SEARCHING FOR FILES
+
+
+
+• locate - searches a database of files /var/lib/locate/locate.db
+         - searched by file name 
+         - `-r` flag to use with regex          
+
+         - the database needs to be kept updated
+
+               • updatedb - needs to be run to update the database
+                          - updatedb is usually run daily from a systemd.timer(8).
+
+         -  tends to be faster than find as it searches the database and not the entire filesystem
+         -  locate tends to be used as its variants mlocate and plocate most of the time
+
+
+
+• find - searches the filesystem for specified parameters.
+       
+   Usage:
+
+       - find <search place> <flags> <search expression>
+
+       - find / -type f -name "*itro*"     - searches in root. for a file. that has `itro` in it's name.
+                                           - if no search place is set then, pwd is starting search place
+
+
+   Flags:
+
+       - `exec command {} +` - executes the command on all the found files. {} is a placeholder for the file name. + is 
+                               for termination.
+       - `-E` - extended regex
+
+     
+   Filters:
+
+      - `-name` - name of files. case sensitive. `-iname` for case insensitive
+      - `-type` - files or directories (type f or type d)
+      
+      - `-mmin -10 -mmin +5` - files modified in the last 10 min. and files modified before 5m ago.
+      - `-mtime` - same as mmin but in days
+      - `-amin` `-cmin` - for access and changed time is also there
+
+      - `-size +5M` - files bigger than 5M
+      - `-empty` - for empty files 
+      - `-perm  777` - files with permissions 777
+      - `maxdepth 1` - only searches down present directory and not deeper
+
+
+• grep - can be used to search the contents of files
+
+   Usage: 
+    
+        grep -rnw <starting directory> -e <pattern> 
+
+   Flags: 
+
+        -r: Recursively search subdirectories.
+
+        -n: Display line numbers for matched content.
+
+        -w: Match the whole word (optional, depending on your search needs).
+
+
+this is a new note :./small_topics/search_tools
+MANAGING KERNEL MODULES	
+
+
+• the linux kernel has a modular structure. so that for each machine and use case we can add or remove exactly what 
+  base functionality that we need.
+
+• modules are often things like file system drivers and other drivers.💀     
+
+
+• lsmod - lists out all the currently loaded modules (from the /proc folder)
+
+• rmmod <module name> - unloads a module from running 
+
+• insmod <module path> - inserts a unloaded module into the running state. they usually live in the /usr/lib/modules/ 
+                         subfolders.
+
+• modprobe <module name> - inserts an unloaded module into the running state, without need to know the whole path. 
+                         - it also loads all the necessary dependancy modules that this module needs to load succesfully
+
+• modinfo <module name> - shows information about that module (description, author, alias, dependencies)
+
+
+
+
+
+
+
+
+this is a new note :./small_topics/kernel_modules
+vim
+
+• :! <command> - can run any linux command inside the terminal!
+• :e! - reverts to the last saved format, doesn't close file 
+• :help - help screen
+
+
+nano
+
+• ctrl+o and ctrl+x  -  save and exit
+• ctrl+6 - to select text
+• alt+6 - to copy
+• ctrl+u - to paste
+• ctrl+k - to cut
+
+this is a new note :./small_topics/txt_editors
+Block devices and character devices can represent either real or virtual devices and are stored in /dev.
+
+•Block Devices: 
+Data is accessed and stored in blocks.
+Supports random access – you can jump directly to any block on the device.
+
+Examples include /dev/sda (a hard disk) and /dev/sdb (a USB drive).
+
+•Character Devices:
+Data is accessed byte by byte. 
+Suitable for devices that produce or consume data one byte at a time.
+Does not allow random access. 
+
+Examples include /dev/tty (terminals), /dev/null, /dev/random, a barcode reader, mice and keyboards
+this is a new note :./small_topics/char_block_devs
+TOOLS TO HELP MONITOR AND VIEW STORAGE USED BY THE SYSTEM
+
+
+• df - shows the file system space usage and mountpoints
+     - shows the space used by each partitionn and block device
+    
+     Usage:  
+		- `df` or `df <partition/block device>`
+
+
+     Flags: 
+		- `-h` - human readable. js use it.
+     
+
+• du - shows the storage of individual files and folders
+     - shows the disk used by all files and folders recursively from pwd (unless flags or args are specified)
+      
+
+    Usage:
+		- `du` 
+		- `du -h -summarize <file/folder>`
+
+    Flags:
+		- `-h` - human readable
+                - `summarize` - doesn't display file sizes recursively 
+                              - and only shows the size of pwd (if no arguments specified) or args
+this is a new note :./small_topics/storage_use
+FILE METADATA TOOLS
+
+• file
+
+     - file is a tool used to display the file type.
+     - eg. directories, ascii files, unicode files (UTF-8)
+
+• stat
+
+     - stat is used to see information abt a file
+     - eg. modified times, changed times (metadata change), access times
+     - permisions, block and inode number and other stuff
+this is a new note :./small_topics/file_metadata
+CONFIG FILES
+
+most config files are stored in either /etc or in the /home/user
+
+Running processes can be made aware of changes to their configuration files using the `systemctl reload <programname>`
+command.
+
+
+
+•WHAT ARE .RPMNEW OR .RPMSAVE FILES?
+
+
+In RHEL based distros if you have already made a config file for a program 
+or an old config file from a previously installed version of the program is present
+
+and you install the program, the new default configuration files that comes with the program will be saved in the normal
+place and have a `.rpmnew` extension
+
+however if there are new changes in the newly installed config file compared to your copy, you will have the option to 
+replace your copy with the new default config 
+
+and your copy will be saved in the same folder with a `.rpmsave` file extension.
+
+
+
+It's main purpose is to allow you to have a fallback option. The .rpmnew or .rpmsave files are usually deleted later
+
+
+.rpmnew  - newly installed config, that's not being used
+
+.rpmnew  - previously installed config, that is not being used
+
+this is a new note :./small_topics/config_files
+Kernel panic usually occurs when:
+
+a process changing run-levels* 
+missing or corrupted drivers
+a hardware issue
+software changes (ex. kernel without necessary modules (eg drivers))
+
+This is equivalent to a BSOD in windows.
+It prevents booting of the machine
+
+*A run level is the complexity level at which a machine is running
+ex. single user mode (no networking)
+    multiuser mode (+- networking)
+    recovery mode 
+    graphical 
+    shutdown or reboot
+
+
+
+
+
+
+
+this is a new note :./small_topics/kernel_panik
+ARCHIVING AND COMPRESSION
+
+how is a zip file made (zip is the windows thing. to achieve the same effect on linux read on)
+
+so a zip file is a bunch of files and folders and images and whatever, that has been archived (placed together to 
+resemble a single file) and then compressed
+
+
+
+
+this is a new note :./small_topics/zip
+HOW TO DOWNLOAD PACKAGES
+
+   Redhat based distros use .rpm files for their packages and Debian based distros use .deb files for
+ 
+   The packages were downloaded and then installed using the installers for the packages
+
+
+• rpm - for installing downloaded packages on RHEL based systems
+
+• dpkg - for installing downloaded packages on Debian based systems
+
+   Use the `-i` flag to INSTALL the packages for both rpm and dpkg (pretty much the main thing to use them for)
+
+   This is the generally outdated way to do stuff, as while rpm and dpkg both show the required dependencies, they do 
+   not install them. the user has to go and find and install the necessary dependencies and the required dependencies 
+   of those dependencies.
+
+   if or when all the dependencies are there and available, the package will be installed with rpm and dpkg.
+
+
+• PACKAGE MANAGERS
+   
+   A package manager is a program that has an online repository of packages and their dependencies so that you dont 
+   have to be in a loop searching for them. it automatically gives you an option to install the package, and downloads 
+   all dependancies required.
+
+   It keeps a list of all the packages downloaded so that it only gets unavailable dependancies.
+  
+   Since these package managers have access to the repos they can download files directly from the repositories (if they
+   are available)
+
+
+    • yum - older RHEL package manager.
+
+    • dnf - the newer RHEL package manager. (has features to rollback)
+   	  - you can rollback to before you installed the package. it removes the package AND the dependencies installed.
+
+
+           subcommands for rpm (redhat package managers):
+
+		  • install <package_name (can be short)> - used to install the downloaded package on your system
+							  - used to download packages that are available in the repos  
+
+		  • history - shows the history of the packages, installed, upgraded and uninstalled with dnf
+			    - you can specify the history of a specific package
+
+		  • history undo <change_number or package name> 
+                                - is used to rollbacks the changes made in that change ver. the change number can be 
+				  viewed using `dnf history` 
+
+ 				- undoes all the changes made and removes all dependencies installed WITH the package.
+				  (only when the change was to install a package) dependencies for that package that 
+				  were installed before are left as it isnt part of that change number. it can undo 
+				  updates and deleted files as well.
+								 
+		  • update - used to update all the packages in the system. it can be used for a specific package too.
+
+		  • upgrade - used to upgrade the entire system (aka deletes obselete packages as well as updating 
+			      others), to ensure that the system is level 
+
+ 		  • search <criteria> - shows the available packages with the search criteria in the name or description
+ 
+ 	          • autoremove - cleans up the system by removing unused libraries and repositories
+  
+
+
+   For debian based systems we use apt or apt-get. apt is newer.
+ 
+    • apt - the  debian package manager, has a few subcommands
+	  - on debian the package manager doesn't automatically refresh the local cache of available packages from the
+	    repositories, like it does in SUSE or RHEL. You need to manually refresh it using apt update.
+	
+
+            SUBCOMMANDS:              
+
+		  • update - updates the YOUR LOCAL COPY OF THE REPOSITORY to have the latest versions
+
+		  • upgrade - updates all the packages (or a specified one) to the latest version.
+
+		  • disk-upgrade - upgrades the entire system to a new level removing obselete packages and updating the
+				   the used ones.
+                                 - can be a bit dangeruous as those "obselete packages" might be used by you
+
+		  • search <criteria> - shows the available packages with the search criteria in the name or description
+
+		  • install <pkg name> - installs a downloaded package OR downloads and installs a new package from repo
+
+		  • autoremove - cleans up the system by removing unused libraries and repositories
+
+		  • info <package name> - shows information (size, sources, description) about a specific package.
+
+   For SUSE Linux we use zypper for package management. It installs and manages rpm files (same as RHEL distros) but it 
+   has a different package management tool.
+
+    • zypper - the package manager for SUSE linux, it's manages the rpm files from it's repositories.
+this is a new note :./package_management
+this is a new note :./disk_setup
+HOW TO MOUNT A FILE SYSTEM 
+
+
+after partitioning and installing a filesystem
+mounting a partition makes it accessible to the user from the point it is mounted on
+
+aka you can access the entire partition from where it has been mounted
+you can only mount by partitions and not drives (unless you using lvm)
+
+
+    -    `lsblk` - prior to mounting 
+    -    `df -h` - after mounting (shows mountpoint too)
+
+
+• mount - used to manually mount drives
+   
+   Usage: `mount <device> <path/to/mountpoint>`
+        : `mount /dev/sdb /mnt`
+
+
+
+• FUSE - file system in user space
+       - doesn't need root permissions
+
+
+
+• umount - used to unmount drives 
+        
+     Usage: `umount <device>`
+            `umount /dev/sdb`
+
+
+
+FSTAB
+
+
+• etc/fstab - entries in the fstab file will be automatically mounted at boot
+            - what is mounted as the root (/) partition is specified here
+	    - you need to have root access to edit the file
+
+    
+	Usage: entries to the fstab file should be made in the order (written in the fstab in shorthand too)
+
+              <device> <mountpoint> <file_system type> <options (can say defauts)> <dump*> <fs_check**>
+
+              device - can be either UUID, path to device or device label
+                     - UUID is generated from the file system, and PARTUUID is generated from the partition
+
+              dump* - an outdated tool used to back up the partition
+
+              fs_check** - enables fs_check to be automatically periodically run on the partition
+			 - 0 - to disable that option
+                         - 1 - to enable it (and it's the root partition)
+                         - 2 - to enable it on a non root partition
+                         - this just allows fs check to be possible and doesn't actually do it
+
+
+
+SYSTEMD MOUNTS
+
+• systemd.mount
+
+    - systemd creates systemd.mount files that actually do the mounting after reading the fstab
+    - you can create them manually but it's recommended (and easier) to just edit fstab
+
+
+    - these .mount files are generated on boot in the /run/systemd/generator/ folder
+    
+    - to make a systemd .mount file directly :
+         
+         - go to /etc/systemd/system/ - where user generated files systemd files should be made 
+           (unless you are making them in your home dir `~/.config/systemd/user`)
+         
+         - create a file (name should follow rules to work)
+           name is based on the mountpoint (eg /mnt/drive3  ->  mnt-drive3.mount)
+
+	 - https://youtu.be/fspjhtUhlp4?list=PL78ppT-_wOmuwT9idLvuoKOn6UYurFKCp&t=999
+         - how the file is written, basic format
+
+
+DOUBLE MOUNTS
+
+   
+    - you can mount the same partition on different mount points and access them easily
+    - you can mount different partitions on the same mount point and would only have access to the latest one, however 
+      when that is unmounted you regain access to the older mounted partition
+this is a new note :./disk_setup/mounting
+PARTITION TOOLS
+
+CHECK OUT THE disk_setup FILE AS WELL
+
+
+• HOW TO OBTAIN INFORMATION ABOUT PARTITIONS
+
+  • blkid - is used to find the UUID, fs
+          - needs root permissions
+
+  • lsscsi - is used to list the storage devices (regardless if they are scsi or not)
+           
+  • lsblk - lists block devices (files) and partitions as well
+          - lists file system for each partition
+          - includes loop files for snaps as well as partitions bc both are block 
+          - `lsblk | grep -v loop` - might help
+
+
+
+
+
+ • partprobe - inform the OS of partition table changes
+             - used when changes are made to the partition table (eg. using gdisk or parted)
+
+
+
+
+
+
+
+
+this is a new note :./disk_setup/partition_tools
+ENCRYPTED PARTITION
+
+
+• cryptsetup 
+  
+          - this is the command to setup and manage encrypted partitions (has support for BitLocker and stuff)
+          - it is often used for LUKS encryption setup or plain dm-crypt encrytion 
+
+	  - the partition is encrypted using a passphrase and can only be accessed if the passphrase is given
+          - possible to use keys instead (you could store them on a seperate usb stick maybe)
+
+          - to access the partition you need to open it, whether for read or write
+          - the partition is now visible in /dev/mapper/<name>
+          - you can now mount it and it install a file system on it
+
+	  - close the device when you are done with it
+          - to open the device means everything is in RAM, so on shutdown, luks is automatically closed 
+             
+
+        
+     LUKS - Linux Unified Keys Setup 
+          - it has metadata headers that is visible and could be damaged but it has more features than dm-crypt
+
+    
+      Usage 
+
+            to create:
+            - cryptsetup <format> <partition>
+            - sudo cryptsetup luksFormat /dev/sdb1
+
+            to open:
+            - cryptsetup open <partition> <name>
+            - the name is what you see the partition as for the time it is open
+  
+	    to close:
+            - cryptsetup close <name>
+        
+          
+  
+    Automatically mount on boot
+
+            - to have the encrypted partition automatically mount on boot you need to:
+ 	      1. open the disk
+                    - create /etc/crypttab
+ 		    - make an entry for the disk:
+                           - <name> <UUID="uuid"> <-> 
+		           - the third field can be used to specify the keys so it can auto decrypt on boot. 
+                           - the `-` makes it ask the user for a passphrase during boot
+              
+	      2. mount it
+                    - make an entry in etc/fstab
+ 		    - check out ./mounting file for more details
+
+                     
+
+
+
+this is a new note :./disk_setup/encrypted_partition
+HOW TO MAKE A NEW HARDDISK A FUNCTIONING MEMBER OF SOCIETY
+
+1. PARTITION
+2. ADD A FILE SYSTEM
+3. MOUNT IT
+
+
+-1. set up the block device
+
+  To make a virtual block instead instead of a real physical HDD:
+
+    a.  - create a file (dd if=/dev/zero of=/path/to/file bs=1M count=100 )
+          dd - command to clone disk or make an image of disk
+          if - Input File
+          of - Output File
+          bs - Block Size 
+          count - number of blocks                         
+
+    b.  - make it a loop device (a virtual block device linked to a file)
+          (losetup -fP /path/to/file)                 
+          losetup - setup and manage loop devices
+          -f  - specify the file (called backing file)
+          -P  - scans the partition table and makes the corresponding loop devices for the partitions 
+      
+
+1. partition:
+
+	 a. make a partition table (for blank disk (or disk image))  ex (gpt, mbr (msdos))
+	 b. then makes the partition
+
+  These tools are all used to make partitions (each can have its own file system) which are each their own block device.
+
+    They make the mbr or gpt and edit these partition tables.
+    examples : sda1 or sdb2, or nvme0n1p1 (device,namespace,partition numbers) 
+
+
+     • fdisk - formating disk
+               partitioning tool for MBR and GPT. It's older than gdisk 
+               both fdisk and gdisk are do not apply changes until the write command is run.
+
+     • gdisk - not in syllabus. Tailored to gpt partioning and does not support MBR. (can convert mbr >> gpt)
+
+     • parted - partition editor
+              - newer than fdisk
+              - RAID and LVM. More complex than fdisk. 
+              - Changes are directly applied and written to the partition table.
+              
+              - `mktable` and `mkpart` are used to make a partition table and a partitions  
+
+
+2. file system:
+
+    a. mkfs.ext4 
+
+3. mount
+this is a new note :./disk_setup/disk_setup
+FILE TRANSFER OVER THE NETWORK
+
+
+• scp - used to share files on the local network (secure as its over SSH)
+      - can copy from either machine 
+      - can work between OSs 
+
+       Usage:
+       	       <source> <destination>
+
+
+               On destination machine (pulling from the source):
+
+               scp <username>@<ip_address>:<path/to/source> <destination>
+            
+	       (eg) scp adminsmith@192.168.0.111:/home/adminsmith/test . 
+
+
+	       On the source machine (copying to the destination):
+
+               scp <source> <USERNAME>@<IP_ADDRESS>:<PATH/TO/DESTINATION>
+             
+	       (eg) scp . adminsmith@192.168.0.111:/home/adminsmith/test
+                       
+
+     Flags - `-r` - used to recursively copy a folder 
+
+
+
+
+• rsync - used to transfer files over the network
+        - only copies files if they have changed (can be used to keep files in sync)
+        - mostly uses ssh but can be used as a daemon version 
+          (this doesn't have encryption so it's faster and less secure)
+        
+ 
+     Usage - same as scp 
+ 
+     Flags - `-r` - used to recursively copy a folder
+           - `-v` - verbose. gives info on which files are being copied (to be kept in sync)
+
+
+
+
+• nc - netcat
+     - used to create tcp/udp connections
+     - mostly used to create a daemon to listen on a port, which then other system could connect to
+       and send data to
+     
+
+     Flags - `-l <PORT>` - the machine starts listening on that port
+                         - `nc -l 9999`
+                         - to connect to the host machine `nc <IP_ADDRESS> <PORT_TO_CONNECT>`
+       			 -  nc test 9999
+
+			 - stdin from both terminals would be transfered over. 
+                         - use Ctrl + C to end connection
+
+			 - `nc -l 9999 < file.txt` - this prints the output of the text file to any machine that 
+                           connects on port 9999
+  			 - `nc 192.188.8.2 9999 > file.txt` - this is a way to transfer from a file to a file using nc
+                         
+
+
+
+
+
+
+
+
+
+this is a new note :./net_file_transfer
+SCHEDULING 
+
+
+• at - used to run a command at a single specified time once.
+     - run the at command specifying the time. type in the command to be executed in the interactive shell. 
+       close the interative shell and set in queue with Ctrl+D.
+
+   Usage:
+         
+          - `at tomorrow` - commands run in the interactive shell will run 24 hours from then.
+          - `at now +5 hours` - runs in 5 hours 
+          - `at 18:00` - runs at 6pm today
+          - `at 18:00 27 August 2024` - yeah runs then ;-)
+     
+   Subcommands:
+
+          - `atq` - (at queue) shows the list of jobs to be run with at
+          - `atrm <job number> - removes a job from the atq. It won't be run
+
+
+• cron - the cron daemon is used to repeatedly run a task
+       - the cron daemon is enabled in systemd
+       - we don't have to use the cron command afaik since cron is automatically run when the file is edited.
+       - the cron daemon reads the the stuff in the files given below
+
+
+       - /var/spool/cron/crontabs/<user> - in the /var/spool directory, all user crontab files are stored 
+                                         - edit them with the `crontab -e` command for syntax checking
+                                         - the commands are run as the user
+
+
+       - /etc/crontab - this is the main crontab file which is the system cron tab.
+                      - this file shouldn't be edited directly
+                      - if you need to make a system cron task make a file in the /etc/cron.d/ folder
+                      - runs the cron.daily, cron.hourly... directories
+                      - in some systems this may be handled by systemd timers instead
+
+
+       - /etc/cron.d/ - stores files that run as a line system in the /etc/crontab
+                      - make a file here instead of editing a the system crontab file
+
+
+
+       - /etc/cron.daily/, cron.hourly/ .... - store scripts or commands in these directories
+                                             - they run at the specified intervals
+                                             - the timings for each are specified by default in the crontab file
+   SUB COMMANDS                                          
+      
+           • crontab - this command is used to edit the user crontab files
+                     - `crontab -e` - opens the user who ran the command's crontab file in /var/spool
+                     - `crontab -u <user>
+
+   • SETTINGS A SCHEDULE
+
+        - type the following line into a user cron file (files not in the etc directory)
+
+     .---------------- minute (0 - 59)
+     |  .------------- hour (0 - 23)
+     |  |  .---------- day of month (1 - 31)
+     |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+     |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+     |  |  |  |  |
+     *  *  *  *  * command to be executed
+    
+
+        - this syntax is for user cron files
+
+        - 10 5 * * 1 mv itro itro2  - moves itro to itro2 every monday at 5:10am
+
+        - 0,30 * * * mv itro itro2 - moves itro to itro2 every half an hour
+           - use comma for two values
+
+        - */30 * * * mv itro2 itro - moves itro2 to itro every half an hour
+           - use */<value> to schedule smth every 5 or 10 min or every 2 or 3 hours
+           - use - to specify ranges
+
+
+     *  *  *  *  * <username> <command to be executed> - this is the syntax for system cron files 
+                                                       - username must be specified
+                                                       - can write a user cron in the root's cron file as well 
+        
+
+
+
+• systemd timers 
+
+     - you can probably create a systemd timer file to mimic cron or at
+     - fedora probably uses this to run the cron.daily and cron.monthly .. files
+           
+
+this is a new note :./scheduling
+SSH
+
+•HOW TO ACCESS A REMOTE HOST WITH PRIVATE KEYS
+
+  - this can be used to avoid typing in the password of the other machine every time
+
+
+  - make a public-private keypair using 
+  
+    • ssh-keygen
+    - keypair is stored in the home folder in the .ssh hidden folder
+    -
+
+  - move the public key to the remote server so it recognizes the private key on connection
+  
+    • ssh-copy-id <user@machine> 
+
+
+  - known_hosts file - stores details and pubkeys of all the hosts that your system has connected to.
+  - authorized_keys file - stores the pubkey of all systems that can connect using private keys
+  - config file - is the local user config file that overrides system defaults
+
+
+• SYSTEM WIDE CONFIG FILES 
+
+  - in /etc/ssh:
+                - ssh_config - system wide ssh client settings
+                - sshd_config - system wide ssh host (daemon) settings. only there if ssh server is installed.
+
+
+
+• SSH-AGENT
+  
+  - ssh-agent is a ssh utility used to repeatedly connect to remote machine without putting in the passphrase for your 
+   private key. (if you have set up keypairs and it put a password on your private key)  
+  - it does this by storing your private key open in memory
+ 
+ • How To Set Up SSH-AGENT
+  
+   - run ssh-agent and run it's output (the output when run, adds the environmental variables needed)
+   - or run `eval `ssh-agent``, (eval automatically runs the output of a command)
+  
+
+  - then run ssh-add
+  - ssh-add is used to open your private key in memory. It adds the default private key. 
+
+
+  - `ssh-agent -k` is used to kill the ssh-agent program
+
+
+
+
+
+
+  
+this is a new note :./ssh
+LOGGING TOOLS
+
+Most log files are stored in the /var/log/ folder
+
+
+• dmesg - logs kernel information (especially during startup)
+        - shows the removal and adding of kernel modules
+
+        
+
+• journalctl -
+
+• syslog -
+this is a new note :./logging
+INTRO 
+
+      A lot of files and programs must be started to get your system up and running for you to use it.
+      Like graphics, network, inter application communication, lots of stuff.
+
+      The systemd starts all of the necessary stuff up. And is the first process to start after the kernel starts.
+
+      systemd is a daemon and is managed using the systemctl command
+
+
+UNIT FILES
+
+     Unit files are files unique to systemd and is how you set up services to run with systemd on boot
+     Unit files are the stuff that systemd runs and manages
+     they include .mount files, .service files, .target files and .timer files
+
+
+  SERVICES
+
+
+      All of the small programs systemd needs to ready the machine are called services. and are run from by systemd 
+      using .(dot)service files
+
+
+      There look like config files and give systemd the path to the actual programs. and required conditions for the 
+      program to run.
+
+
+  TARGETS 
+
+
+      Then there are .(dot)target files, they start a group of services.
+
+      Targets can be used to specify all the services required to run the whole system.
+      So just running one target gets the whole system up.
+
+      Targets however can be used for smaller things too and not set up the whole system, but instead just combine 
+      multiple services.
+
+      There is a graphical target, multi user target or rescue target that calls the services for the system to be in a 
+      graphical, multi user or rescue mode.
+
+
+systemctl setdefault 
+
+
+~/.config/systemd/user - applies to only that user and holds priority over the rest
+
+/etc/systemd/system/ - priority over /run - copy files from usr/lib/ to /etc/systemd/ to modify them. and avoid system 
+                       updates
+
+/run/systemd/system/ - priority over /usr/lib.
+
+/usr/lib/systemd/system/ - main system services provided by the distro. is changed during updates. 
+
+=====================================================================================================================
+
+systemd servies. how to make them
+
+Make them in the directories listed above. Try to use ~/.config/systemd/user for services that apply to only a single user
+
+[Unit]
+Description= This is a service
+Requires= services
+
+#a wider range than just the service itself
+
+
+[Services]
+ExecStart= a single command, path to program or shell script
+ExecStop= by default kills the process (if not specified). or a else a single command, program or shell script
+
+#what to do when `systemctl start process.service` or `systemctl stop process.service` is run
+#The service itself
+
+[Install]
+#to specify if a service is enabled. (start automatically on boot). disable is the default.
+
+=====================================================================================================================
+
+SYSTEMCTL
+
+      used to manage the systemd daemon.
+      use the subcommands for systemctl
+   
+      `systemctl status <process (eg apache2)>` - doesn't require sudo
+                                                - gives details on if the process is running or enabled, PID, resource 
+                                                  usage, where the program file and service file are
+
+      `systemctl start/stop <process>` - used to start or stop a process
+                   /restart            - runs execstart/execstop from the service file
+                                       - only runs for this session (not through reboot)
+				       - restart stops and starts the services
+    
+      `systemctl reload <process>` - used to reload the CONFIG files of that specific service.
+				   - usually used first over `restart` when a change is made as it doesnt reload the 
+				     files if they are faulty and keeps the service running
+
+      `systemctl enable/disable <process>` - specifies whether or not to start process on boot
+					   - when enabled it:
+					   - creates a symlink to in the folder "./multi-user.target.wants"
+                                           - so process stored here probably run on boot when using multiuser mode
+
+
+      `systemctl mask/umask <process>` - when mask is used, a service file for it that is a symlink to /dev/null 
+                                         is created
+				       - mask disables process from starting on boot
+                                       - and process doesn't run when the start command is used
+                                       - use umask to unmask the service  
+                                       
+
+      `systemctl daemon-reload` - ensures that systemd is upto date with any changes made in the systemd folders to the
+				  UNIT files and the SERVICE files. the config files of a specific process will not be 
+				  reloaded.
+
+      
+
+
+ 
+`systemctl --user status <process.service>` - this displays the status of process.service for a service in the 
+                                              ~/.config/systemd/user directory.
+
+`systemctl status <process.service>` - this displays the status of the process.service but can be used for other unit 
+                                       types as well. This only works for system wide services.
+
+
+
+
+**2 systemds, 1 uses super important system services files, other user service files
+this is a new note :./systemd
+this is a new note :./managing_programs
+HOW TO RUN A PROCESS IN BACKGROUND
+
+
+
+• cntrl + z - sends SIGSTP (signal stop) and it also backgrounds the process.
+            - the stop signal doesnt end a program but temporarily pauses it (check ./process_states and stopped state)
+
+
+• bg - unpauses the process (that was stopped when cntrl + z was used) running in the background  
+     - bg <process_number>
+
+
+• fg - moves the process to the foreground   
+     - fg <process_number>
+     - you can now stop the program
+
+
+• jobs - shows the list of background processes
+       - if the process has a + next to it, it is the default process and you dont need to specify a process number when
+	 using bg or fg
+
+
+• & - running a command with & at the end, would background the command and it wouldn't be stopped so no need to run bg
+
+
+• - background jobs end when you close that terminal
+  - STDOUT of backgrounded processes are sent to the terminal screen regardless of whether it is backgrounded
+  - use >> (redirection to /dev/null for example) to prevent output to terminal
+  - 
+
+
+
+
+
+
+• systemd - you can make a .systemd service file and enable it to run at boot to have background process permanently
+ 
+
+• crontab - you can specify in the user crontab file (crontab -e) 
+            or make a systemwide crontab file in the /etc/cron.d/ folder
+
+          - `@reboot <command>` ex. @reboot ". home" (runs the home program, not sure if the command works ;)
+this is a new note :./managing_programs/bg_processes
+PROCESS STATES
+
+there are a few states a process that is displayed in ps can be in. 
+(if a process isnt displayed on ps or top, it is dead, fully and totally dead)
+
+
+• running - this is your active normal process 
+          - symbolised by R
+
+
+
+• stopped - this is when a process is paused 
+          - a truly dead or killed process wont have a pid or be shown on ps
+            stopped is not dead
+          - represented by T
+ 
+         
+
+• sleeping (int) - this is when a process isn't actively doing anything at that moment and is just waiting for a command
+                 - if you open vim and leave it, or if you start a sleep timer that is a sleeping process waiting 
+		   for an action
+                 - this is the most common state
+                 - int means interruptable and it can be killed or activated
+                 - symbolized by T
+
+
+
+• sleeping (unint) - when a process puts all it's resources into smth it is failing at (eg getting enough disk IO), 
+                     it can do into this state
+		   - since it is using all it's resources it does not put resources into listening to you
+                   - unint means uninterruptable, means it does not respond to kill signals and cannot be killed
+		   - you'll need to wait for it to succeed at the problem or reboot to kill the process
+                   - represented by D
+
+
+• zombie process - when a parent process leaves it's child's pid and doesnt remove it after the child process has ended.
+                 - so the child process is technincally dead and over but it's pid is still there bc the parent hasn't 
+		   removed it
+                 - you cant kill it cuz there is no process to kill (kill sigs end the process not remove the pid)
+                 - can only be ended by killing the parent process or sending a `SIGCHILD` signal to the parents 
+		   (doesnt usually work)
+		 - represented by Z
+
+
+this is a new note :./managing_programs/process_states
+favorite_teams='
+This displays the following notes in this chapter in this order:
+
+kill_programs
+
+find_pid
+ 
+process_states
+
+`:n` - to see the next file
+
+`:p` - to see the previous file
+
+
+
+'
+less "$favorite_teams" kill_programs find_pid process_states
+
+this is a new note :./managing_programs/.fullchap.x
+STOPPING A PROGRAM
+
+
+
+• kill 
+         - the kill command is used to send a signal to a program
+	 - the signal is often to end the program but not always, and the signal can be used for other things
+
+
+   Usage:
+            - `kill -<signal> <process id>`
+            - you have to specify what signal you want to send to a process
+	    - if not specified the default is KILLTERM
+
+
+       Signals:
+                  - SIGTERM or 15 - is a default attempt to end a process. it is a light way and doesn't always work
+                  - SIGKILL or 9 - is the absolute kill method. it ends a process, and always works.
+ 
+                  - SIGHUP or 1 - original purpose - when ppl got disconnected from a remote system, and they are no
+                                  longer in the system, the program is told to stop as the user has "hungup"
+				- newer purpose - used to refresh configuration file. occurs most of the time
+                                - SIGHUP could both refresh the config file or end a program. depends on the programmer
+				  It's usually the newer option tho (refresh config and reload program)
+
+
+• killall 
+            - same as kill
+            - kills all process that have that name
+            - sends a signal to process that are SPECIFIED BY NAME instead of PROCESS ID	
+	    - only sends a signal with process name, nothing happens with pid
+              
+
+• pkill 
+
+          - same as killall
+          - but it also kills all processes that only partitially match the name.
+          - killall needs an exact match, while pkill will send the signal
+
+
+
+• cntrl + c  - SIGINT (sends signal interrupt)
+
+• cntrl + z - SIGSTP (sends signal stop)  it also backgrounds the process.
+	    - the stop signal doesnt end a program but temporarily pauses it (check ./process_states and stopped state)
+
+• cntrl + d - EOF (end of file) not a signal
+	    - tell the terminal that you're done typing (closes interactive shell)
+
+
+this is a new note :./managing_programs/kill_programs
+FIND PROCESS ID
+
+
+• pidof
+         - finds the pid of a running process
+
+      Usage:
+                - `pidof <process_name>`
+                - needs an exact match, or nothing will be returned
+
+
+
+• pgrep
+
+        - same as pidof, tho like pkill it doesnt need exact match
+
+
+
+• lsof
+
+        - list open files
+        - lots of stuff
+        - ports are files 
+       
+  
+     Flag: 
+            - `lsof -u <user>` - shows process for that user
+            - `lsof -i` - shows open ports
+ 
+
+       
+
+• ps 
+
+       - used to show the list of running processes at that point in time
+       - it shows pid, cpu usage, ram and stuff
+       - sorts by process id
+     
+     Flag:
+	    - `ps aux` or `ps -ef` - commonly used standards to view the running task
+	    - `-l` - to see nice value            
+
+
+
+
+• top
+
+       - used to show list of running process live 
+       - shows nice value under NI
+     
+       
+       - sorts by CPU usage
+       - can use < or > to change what it sorts by 
+       - use Ctrl + R to reverse sort order
+
+
+       Flags: 
+              `-p <PID>` - shows the details for that process only 
+
+
+• htop
+
+       - a better top
+       - shows uptime, threads, graphs, and everything top does 
+       - let's you use mouse TO SORT WOOHOO
+       - you can kill process directly from htop. woohoo
+
+
+
+SETTING PRIORITIES
+
+  What Is Nice Level?
+
+      - a nice level is the priority level of a process
+      - determines it's right to system resources and cpu cycles
+      - it ranges from -19 to 19, with -19 the highest priority and 19 being the lowest
+
+      - the default nice level for a process is 0
+
+
+• nice
+
+      - used to START a process with a specific nice level
+
+
+      Usage:
+	     `nice -n <nice value> <process to run>`
+
+      Flags:
+    	     `-n` - is used to specify a nice value
+                  - it doesnt have to be done. eg -10 sets a nice value of 10. it is confusing without -n so use it
+                 
+
+
+• renice
+
+
+     - used to CHANGE the nice level of a RUNNNING process
+     - as a running process will already have a nice value
+     - no process can be given a higher nice value unless you have root priviledges
+
+
+     Usage: 
+	    `renice -n <nice value> <PID>` 
+this is a new note :./managing_programs/find_pid
+• GIT is a software used for version control of files and folders
+ 
+
+• GITHUB is when instead of storing the versions of your files and folders locally, you store them remotely on github 
+  servers 
+  - gitlab and bitbucket serve the same function
+
+GIT
+
+* Setting up a basic git system
+
+
+   • `git init` - is the command first run to initialize git on your system.
+                - this is used to create a new repository (a directory for a project)
+
+   • `git add <path to file>` - choose what you want to save the current version of. 
+                              - `git add .` to choose to save the pwd
+                              - it's added to the staging area
+
+   • `git status` - displays the staging area
+
+
+   • `git commit` -  actually commits these changes to memory.
+                  - `-m 'stuff'` - this flag is used to add a description of the committed files (message)
+                  - `git commit -m 'added images'` 
+                  - `git commit -a` - commits files all appended files without staging 
+     
+
+   • `git diff` - shows diff between pwd and the staging area
+               - `git diff <commit> <commit>` - displays diff between commits        
+
+              
+   • `git log` - see a log of all previous commits
+              - and stores the message and hash of each commit
+
+
+ 
+* Working on a group project with git
+
+
+   • `git clone <repo/to/be/cloned>` - clones a repository. this is often done for a remote repository so you can work 
+                                       on this individually and push changes when required.
+                                     - specify the url of the repo, the ssh path of the repo or the normal local path.
+ 
+
+   • `git checkout <commit hash>` - returns back to previous saved state
+                               
+      `git checkout -b <branch name>` - makes a new branch
+
+
+
+* Branches and shit
+
+
+  • `git branch <new_branch_name> - makes a new branch
+                                - `git branch` without specifying a branch name, lists created branches
+
+
+  • `git switch <branch_name>` and `git checkout <branch_name>` - both switch to a new branch, so all future commits 
+                                                                   are made on that branch
+  • `git rebase` - means to change  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+this is a new note :./git
+lspci - lists pci devices
+      - nvme (~4 lanes) 
+      - network card (~1)
+      - gpu (~16 lanes)
+
+lsusb - lists usb devices
+      - internal usb devices as well
+      - mice/keyboard
+      - inbuilt webcam 
+      - fingerprint sensor
+
+dmidecode - displays the dmi table (or SMBIOS)
+          - made at manufacture and doesn't scan hardware or account for hardware changes (better for laptops)
+          - not fully accurate and prone to state max regardless of whethever this is actually supported
+          - the dmi table is linked to the firmware and is not linked to any OS. (can be read without OS)
+
+
+lshw - more accurate than dmi table as it scans the hardware live
+     - not in syllabus  
+this is a new note :./hardware_info
+this is a new note :./permissions
+MAC - mandatory access control. 
+
+SElinux is a MAC program used to control permissions with more authority than the user based permissions (changed using chown).
+
+Often used to control the permissions of programs to files (eg, the files ) 
+this is a new note :./permissions/SELinux
+this is a new note :./line_editors
+regex - \b - border (instead of space - less than a space) between number, letter and everything. (only gnu sed)
+      - | - or 
+      - () - capturing group - can be referred (backreference) to in the replace. makes no difference to search
+      - [] - character class eg.[1-9],[A-Za-z],[aB],[[:punct:]] one of any of characters in the brackets
+           - matches one of the letters in the brackets. Can use a quantifier.
+      - {m,n} specifies number of characters in prev (quantifier), can use *,+,? instead
+      - [:x:] - character set eg, [:punct:],[:alpha:],[:cntrl:] enclosed in a character class (in double box 
+                brackets)
+      - ^ - start of line aka line starts with eg. /^$/ - blank line, /^#/ - comment 
+
+
+
+ 
+sed commands
+ 
+     - '/search/d' - deletes matched LINE (substitute for individual word deletion). skips over all sed commands for 
+        this line and goes to the next line.
+     - 's/search/replace/i' - case insensitive for search
+     - 's/search/replace/p' - explicit print for that line. useful with -n flag
+     
+     - H - adds a new line. appends patterns space to hold space
+     - pattern space - where sed executes sed code on a single line (replaced for each line - short term)
+     - hold space - empty unless written to (long term)
+  
+     - x - switches hold space and pattern space
+     - N - appends the next line to pattern space, and keeps the /n. 
+       It also seems skip over the line appended to pattern space so that line appended is not processed again.
+     - G - adds a new line. then appends hold space to pattern space.            
+   
+    
+  :target occurence - 's/search/replace/g' - g substitute all matches in a line
+                    - 's/search/replace/2g' - substitute all matches from the second match in a line (including 2nd
+                       match), without g (just a number) only substitutes that nth match
+                    - 's/search/replace/2' -  g only substitutes that nth match
+                    - *can be used with p and i to specify and target specific words.
+                    
+                    - `condition {sed}`  OR   `/condition/ {sed}`    (place condition in // if it uses regex)
+                     eg. 
+
+   
+  :ranges - 5,$ {sed command} - only acts on lines 5 to the last line.
+           - 7 {sed command} - only acts on seventh line
+           - 3,9 ! {sed command} - acts on all lines except lines 3 to 9 
+
+
+
+sed shorts - $ - last line (ubiquitous) - for specifing ranges (outside of the command  $ {s/find/replace}))
+           - $ - end of line (when used in a command eg. 's/$/BYE/')
+           - 1 - beginning of file
+           - ^ - beginning of a line ('s/^/HI/')
+	   - & - often used in replace. It is equivalent to what is matched by search. eg `s/[Hh]i/(&)/` 
+           - ; - seperates seperate sed commands  (a \n newline also seperates commands)
+             all commands act on a single line unless the cycle is broken (with d or smth)
+	   - 's/search/replace/2' - substitute a second match in a line (including 2nd match), without g (just a 
+              number) only substitutes that nth match
+           - {sed command} - when a condition is present (eg. ! or 3,$) use curly brackets 
+
+sed flags (gnu) - sed [command] [input] [optional more input ex. file.txt] [more optional input]
+		- -r - extended regex
+		- -i - overwrites files with sed output
+                - -n - no printing unless speicified in sed code (sed otherwise always prints patterns space by 
+                       default)
+		- -f - takes in a file as program file to run
+
+*******************************************************************************************************************
+
+examples : make everything on a single line - ` sed -n '{H} ; $ {x;s:\n::g;p}' `
+         : explanation -  {H} - append every line to hold space, append pattern space (that line) to hold space. 
+                       - `$ {x` -  if the last line, swap pattern space and hold space.
+                       - 's:\n::g' -  remove ALL (using g in substitute) newlines (\n) in pattern space.
+                       - now only print pattern space (due to -n flag)  
+this is a new note :./line_editors/sedinfo
+stream editor, with 'full'  programming capabilities.
+
+•Awk command and flags:
+	awk [command] [data]
+	-f - the -f flag allows for a awk program file to be run
+	-F[field seperator] - used to specify the field seperator ex. `-F:` or `-F;`
+
+•Loops and conditions:
+	•if statement:
+		if (condition) {action}
+
+	•for statement:
+		for ((i=)start, condition,(i=) increment) {action}
+		  - Only when the condition is true will the loop run.
+		  - `i` is the counter variable and is assigned to the start value and `i` is usually a field. 
+
+•Print:
+	•print - a simple print that doesn't process  control characters (\n,\t):
+	   `print x` OR `print "hello" x`  
+	•printf - a more complex print that does process the above:
+	   `print "%s is the best %s in %d place and wins £%f \n",name,profession,place,prize`
+	      %'x' - a place holder for a variable in a print statement
+              %s - strings, in awk floats and numbers are also strings
+     	      %d - integer, %f - decimal float (%0.2f - truncates to 2dp), %% - literal percent
+	•sprintf - this doesn't print to the screen 
+	         - used to store formated strings in variables so that they can further processed. 
+
+•Built-in variables of awk
+	• NF (Number of Field) - variable representing the total number of fields in that line. 
+	• NR (Number of Records) - variable representing the record number in awk. ex. $NR
+	• FS (Field Seperator) - can be specified in flags or in the command and can be changed throughout the code
+	   - ex. FS=":"  (when FS is specified in code)
+	   - When FS is specified it only applies to subsequent lines and not to the current line. 
+	   - $0=$0 is a workaround that can be used to force awk to apply the field seperator. 
+	   - It may be best to write in the BEGIN block as this is applied globally and works on all lines directly. 
+	• OFS (Output Field Seperator) - seperates fields in output (print) of awk commands. ex. OFS=":"
+	
+
+•Regex:
+	• /regex/ - regex must be in between the forward slashes
+	• `~` - means matches the expression ex. if (x ~ /hello|hi/) {print "hello to you too"}
+	• `!~` - means doesn't match the expression. ex. if (x !~ /hello|hi/) {print "fugge off too"}
+	• for more information on regex in a more general use check the .sedinfo in the .hidden
+
+•Built-in awk functions:
+	• length(string) - returns the total number of characters in a string. Can use variables instead
+	• sub(find,replace,in_this_string) - sub is used for substitute. 
+	    - The last parameter `in_this_string` is not necessary as if not specified $0 is taken as the string.
+	
+
+•Awk Shorts:
+	• $0 - this is equivalent to the entire line (or whtevr the delimeter for records is)
+	• base.txt - a text file (made by me) with the general format of awk programs. 
+	•
+this is a new note :./line_editors/awkinfo
+• zypper package management
+
+• archiving options
+
+•
+this is a new note :./README
+this is a new note :./network_management
+HOW TO READ INFORMATION ON YOUR DNS
+
+
+• dig   - displays DNS entries
+	- finds out the IP address of a given domain by looking through sources
+        - looks in cache first tho (resolvectl flush-caches to clear the cache)
+	- same format as actual name records
+
+  
+      Flags:
+             - `-x` - the dash x flag does a reverse lookup (finding domain name from IP address)
+
+
+
+• resolvectl query - a subcommand of resolvectl 
+                  
+
+
+
+• nslookup - name server lookup
+	   - does reverse lookups automatically (without flag)
+
+	Flags: 
+		`-type=<record type>` - used to find specific dns records (other than A records)
+				      - mx is for mail exchanger and cname for aliases 
+
+
+
+• host - same as above lol
+       - short and sweet, IPv4, IPv6 and mail exchange record and done
+
+
+	Flags:
+		- '-v' - verbose, lots of junk data
+
+
+• WHOIS - query registars for contact information of a the owner of a domain
+        - shows the address, phone number and other stuff of the domain owner
+
+	- ppl often use a proxy to put their information instead and as such the owner's real info isnt there
+this is a new note :./network_management/read_DNS
+NAME RESOLUTION
+
+
+• /etc/nsswitch.conf  is the file that manages how a (C) application (eg. ping) gets network information (and other 
+                      information), and lists out what sources to check.
+
+                     - specified for the `hosts:` setting is the order and sources that a application should check first
+                       to find out name resolution.
+		     - `hosts: files dns myhostname`
+                        means that it checks /etc/hosts first, then DNS and then checks against hostname
+
+
+• /etc/hosts  is a local file that is checked for name resolution before DNS. information here takes precedence over 
+              information from DNS, as DNS isn't checked if /etc/hosts has a valid IP for the domain.
+             
+	    - <IP_address> <Domain_Name/URL> - the format used when specifing a new IP in /etc/hosts
+
+
+
+• /etc/resolv.conf  is the local file that is looked at, if the /etc/hosts file does not have the information. It stores
+		    details on which DNS to query for the domain name.
+
+                  - it is an automatically generated file by NetworkManager and it is not recommended to change when a 
+		    long time change is required.
+
+		  - ubuntu and other OS's name a local cached dns instead of the actual dns used
+
+		  - change this file /etc/systemd/resolved.conf to make it permanent
+
+
+		   
+
+
+this is a new note :./network_management/files_DNS
+DNS TOOLS 
+
+
+
+• resolvectl - a systemd commands used to see some dns information
+
+	Subcommands:
+                     - `status` - shows the IP of the DNS servers that the system queries (from the /etc/resolv.conf)
+		     - it is the default subcommand of resolvectl
+
+
+		     - `flush-caches` - a subcommand to clear cache of previous resolved domain names
+                     - this ensures that the dns or files are queried instead of the checking the cache 
+ 
+
+		     - `query <domain name>` - displays dns records (like dig)
+
+
+
+• hostnamectl - shows the information abt the system
+              - hostname, OS ver, kernel ver, hardware model
+              - what the fuck
+	      - a systemd thing
+	      - you can change the hostname (`hostnamectl hostname <new_host_name>`)
+
+
+
+• hostname - displays just the hostname
+
+
+this is a new note :./network_management/tools_DNS
+index='tools_DNS - is to see DNS setting using tools 
+
+(see what is in the files, using the tools)
+
+
+files_DNS - see the files
+          - and how to specify settings 
+
+
+read_DNS - finds and displays the records on the DNS'
+
+cat $index
+this is a new note :./network_management/.details

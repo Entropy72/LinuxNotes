@@ -1,0 +1,14 @@
+Block devices and character devices can represent either real or virtual devices and are stored in /dev.
+
+•Block Devices: 
+Data is accessed and stored in blocks.
+Supports random access – you can jump directly to any block on the device.
+
+Examples include /dev/sda (a hard disk) and /dev/sdb (a USB drive).
+
+•Character Devices:
+Data is accessed byte by byte. 
+Suitable for devices that produce or consume data one byte at a time.
+Does not allow random access. 
+
+Examples include /dev/tty (terminals), /dev/null, /dev/random, a barcode reader, mice and keyboards

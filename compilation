@@ -1,0 +1,60 @@
+Compliling a package is making it into an executable for a program (like discord, firefox, kernel)
+
+The non-compiled package is usually written in C or C++ or Rust which is then converted into machine code by a compiler
+
+It is done instead downloading the pre-compiled version of the binary (from the app store of whatever)
+
+It is usually done to access newer versions of programs that are not pre compiled yet
+
+The final executable tends to be more personalised for the system and any may not build stuff that does not have supporting libraries.
+
+
+
+
+GNU Autotools (a collection of tools including compiling tools) can be used for compilation 
+-3 main tools (automake, autoconf, libsmth)
+- should be preferably be installed for easier compilation, each tool installed seperately
+
+
+(prev steps - not in syllabus)
+- originally existing ./configure.ac and ./Makefile.am present with the uncompiled program and made by the developer.
+- run `autoreconf -i` - calls autoconf and other GNU Autotools
+- this produces the ./configure file
+- alot of packages have ./configure file already made
+
+
+
+
+•./configure - a script file
+             - reads the configure.ac file (this is made by autoscan (included in GNU autotools))
+             - Makefile.am (dev) >> Makefile.in >> Makefile
+             - makes a Makefile  (no extension)
+	     - devs can already make a manual MakeFile and there is no need to run the ./configure script     
+
+
+•MakeFile - Makefile can be instructions to demostrating how to compile 
+          - or general purpose commands unrelated to compiling. Often targets are specified
+          - Targets are kinda like flags, and part of a specified program.
+      
+
+
+•make - GNU Make and not part of GNU Autotools
+      - reads the Makefile made by ./configure script and builds the executable   
+       uses a compiling program (the actual main compiler that creates a binary) (eg. gcc or rustc (cargo uses rustc)) 
+      - compiles the package and necessary available libraries; linking them together
+   
+
+
+•make install - installs the application in the correct location and directory 
+              - ex. programs >> /usr/bin, libraries >> /usr/lib,  
+              - a target (like a flag, part of the command) of make
+ 
+
+
+IN SUMMARY : ./configure
+             make
+             make install
+
+
+NOTE: wikipedia article on GNU Autotools has a really helpful table on all the steps 
+    : cmake is seems much easier and user friendly that our dear GNU Autotools 

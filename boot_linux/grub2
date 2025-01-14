@@ -1,0 +1,76 @@
+These are grub commands
+
+• grub2-install  -  installs grub2 bootloader. Used for setup, reinstallation and repair. (for bios only)
+                 -  install the grub2-efi package using a package manager for uefi systems. 
+
+
+• grub2-mkconfig -  builds the grub2 config file in /boot/grub/grub.cfg (file grub reads)
+		 -  based on the config files in /etc/grub.d/ and /etc/default/grub file
+                 
+                 -  /boot/grub/grub.cfg - BIOS systems, /boot/efi/EFI/grub.cfg - UEFI systems: 
+
+                 -  all edits to change grub2 should be done in the /etc/ files not the config in /boot/
+		 -  run this after making any changes to the files in etc to rebuild the /boot/ config.
+
+                 - to run the command manually use `grub2-mkconfig -o /boot/grub/grub.cfg` 
+                 - `-o` is to write to file and not standard output. The file to be written to must be specified.
+
+
+• grub2-update   - this is not a grub2 command but a shell script provided by the OS
+		 - it runs `grub2-mkconfig -o /boot/grub/grub.cfg` 
+                 - this is usually run instead of manually updating grub. This script is not automatically run.
+         
+                 - can also be known as `update-grub2` or `grubby` and may vary between OSs.
+                 - edit: while the syllabus says grub2-update, there seems no one who uses that name.
+
+
+
+How to change settings for grub
+
+• /etc/grub.d/40_custom - for adding new menu entries
+
+• /etc/default/grub - for changing menu timeout and other stuff
+
+• grub menu - press e to edit the the menu options directly. only a one time boot.  
+
+
+
+Making menu entries
+
+ •INFO
+
+   • Menu entries are the choices you have to boot into when booting and the grub menu shows up.
+
+
+   • All custom menu must be added here /etc/grub.d/40_custom 
+   • Usually OSs and linux kernels menu entries (from package manager) are automatically added by grub2 during 
+     installation or package upgrades.
+
+   • Manual menu entries are only added when linux kernels are not installed from a package manager 
+   • Or when the user wants to change the name or setting of how a kernel or OS boots.
+   • (eg. single user mode, name of Menu Entry, read only, splash)
+   • User can have a new menu entry (multiple) linking to the same OS or kernel or just edit the existing menu entry.
+
+
+ • ADDING OR EDITING AN ENTRY
+ 
+   • For one time boot with different settings than /boot/grub/grub.cfg press `e` on the selected boot entry in the grub     menu. 
+  
+   • This goes into editing mode and allows changes to be temperorily made to the data in the grub.cfg for that single 
+     menu entry for a single boot. (can used for rescue or repair) 
+
+  
+   • Adding a basic menu entry to 40_custom:
+  
+   • menuentry "Name"  {     		    - specify name of menu entry
+     set root=(hd0,1)                       - specify disk and partition for /boot. hd0 is first drive. 1 is first 
+                                              partition
+     linux /boot/vmlinuz                    - specify kernel path. specify root partition with root=uuid or root=path 
+                                              as a flag.
+     initrd /initrd    }            	    - specify initrd or initramfs path
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+PROCESS STATES
+
+there are a few states a process that is displayed in ps can be in. 
+(if a process isnt displayed on ps or top, it is dead, fully and totally dead)
+
+
+• running - this is your active normal process 
+          - symbolised by R
+
+
+
+• stopped - this is when a process is paused 
+          - a truly dead or killed process wont have a pid or be shown on ps
+            stopped is not dead
+          - represented by T
+ 
+         
+
+• sleeping (int) - this is when a process isn't actively doing anything at that moment and is just waiting for a command
+                 - if you open vim and leave it, or if you start a sleep timer that is a sleeping process waiting 
+		   for an action
+                 - this is the most common state
+                 - int means interruptable and it can be killed or activated
+                 - symbolized by T
+
+
+
+• sleeping (unint) - when a process puts all it's resources into smth it is failing at (eg getting enough disk IO), 
+                     it can do into this state
+		   - since it is using all it's resources it does not put resources into listening to you
+                   - unint means uninterruptable, means it does not respond to kill signals and cannot be killed
+		   - you'll need to wait for it to succeed at the problem or reboot to kill the process
+                   - represented by D
+
+
+• zombie process - when a parent process leaves it's child's pid and doesnt remove it after the child process has ended.
+                 - so the child process is technincally dead and over but it's pid is still there bc the parent hasn't 
+		   removed it
+                 - you cant kill it cuz there is no process to kill (kill sigs end the process not remove the pid)
+                 - can only be ended by killing the parent process or sending a `SIGCHILD` signal to the parents 
+		   (doesnt usually work)
+		 - represented by Z
+
+

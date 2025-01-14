@@ -1,0 +1,33 @@
+NAME RESOLUTION
+
+
+• /etc/nsswitch.conf  is the file that manages how a (C) application (eg. ping) gets network information (and other 
+                      information), and lists out what sources to check.
+
+                     - specified for the `hosts:` setting is the order and sources that a application should check first
+                       to find out name resolution.
+		     - `hosts: files dns myhostname`
+                        means that it checks /etc/hosts first, then DNS and then checks against hostname
+
+
+• /etc/hosts  is a local file that is checked for name resolution before DNS. information here takes precedence over 
+              information from DNS, as DNS isn't checked if /etc/hosts has a valid IP for the domain.
+             
+	    - <IP_address> <Domain_Name/URL> - the format used when specifing a new IP in /etc/hosts
+
+
+
+• /etc/resolv.conf  is the local file that is looked at, if the /etc/hosts file does not have the information. It stores
+		    details on which DNS to query for the domain name.
+
+                  - it is an automatically generated file by NetworkManager and it is not recommended to change when a 
+		    long time change is required.
+
+		  - ubuntu and other OS's name a local cached dns instead of the actual dns used
+
+		  - change this file /etc/systemd/resolved.conf to make it permanent
+
+
+		   
+
+

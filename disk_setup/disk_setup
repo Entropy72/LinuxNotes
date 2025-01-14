@@ -1,0 +1,55 @@
+HOW TO MAKE A NEW HARDDISK A FUNCTIONING MEMBER OF SOCIETY
+
+1. PARTITION
+2. ADD A FILE SYSTEM
+3. MOUNT IT
+
+
+-1. set up the block device
+
+  To make a virtual block instead instead of a real physical HDD:
+
+    a.  - create a file (dd if=/dev/zero of=/path/to/file bs=1M count=100 )
+          dd - command to clone disk or make an image of disk
+          if - Input File
+          of - Output File
+          bs - Block Size 
+          count - number of blocks                         
+
+    b.  - make it a loop device (a virtual block device linked to a file)
+          (losetup -fP /path/to/file)                 
+          losetup - setup and manage loop devices
+          -f  - specify the file (called backing file)
+          -P  - scans the partition table and makes the corresponding loop devices for the partitions 
+      
+
+1. partition:
+
+	 a. make a partition table (for blank disk (or disk image))  ex (gpt, mbr (msdos))
+	 b. then makes the partition
+
+  These tools are all used to make partitions (each can have its own file system) which are each their own block device.
+
+    They make the mbr or gpt and edit these partition tables.
+    examples : sda1 or sdb2, or nvme0n1p1 (device,namespace,partition numbers) 
+
+
+     • fdisk - formating disk
+               partitioning tool for MBR and GPT. It's older than gdisk 
+               both fdisk and gdisk are do not apply changes until the write command is run.
+
+     • gdisk - not in syllabus. Tailored to gpt partioning and does not support MBR. (can convert mbr >> gpt)
+
+     • parted - partition editor
+              - newer than fdisk
+              - RAID and LVM. More complex than fdisk. 
+              - Changes are directly applied and written to the partition table.
+              
+              - `mktable` and `mkpart` are used to make a partition table and a partitions  
+
+
+2. file system:
+
+    a. mkfs.ext4 
+
+3. mount

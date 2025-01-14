@@ -1,0 +1,42 @@
+HOW TO RUN A PROCESS IN BACKGROUND
+
+
+
+• cntrl + z - sends SIGSTP (signal stop) and it also backgrounds the process.
+            - the stop signal doesnt end a program but temporarily pauses it (check ./process_states and stopped state)
+
+
+• bg - unpauses the process (that was stopped when cntrl + z was used) running in the background  
+     - bg <process_number>
+
+
+• fg - moves the process to the foreground   
+     - fg <process_number>
+     - you can now stop the program
+
+
+• jobs - shows the list of background processes
+       - if the process has a + next to it, it is the default process and you dont need to specify a process number when
+	 using bg or fg
+
+
+• & - running a command with & at the end, would background the command and it wouldn't be stopped so no need to run bg
+
+
+• - background jobs end when you close that terminal
+  - STDOUT of backgrounded processes are sent to the terminal screen regardless of whether it is backgrounded
+  - use >> (redirection to /dev/null for example) to prevent output to terminal
+  - 
+
+
+
+
+
+
+• systemd - you can make a .systemd service file and enable it to run at boot to have background process permanently
+ 
+
+• crontab - you can specify in the user crontab file (crontab -e) 
+            or make a systemwide crontab file in the /etc/cron.d/ folder
+
+          - `@reboot <command>` ex. @reboot ". home" (runs the home program, not sure if the command works ;)
