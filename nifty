@@ -1,0 +1,33 @@
+1. <<'EOF' - This is a heredoc - it does not expand bash variables, taking them literally instead.
+2. <<EOF - This is a heredoc as well - it expands bash variables.
+3. '' - a single quote allows a command to span mulitple line.
+
+4. diff -y - shows the files (even if they are the same) side by side
+5. echo $PATH - prints out the path, which is where bash automatically searches for binaries 
+    - programs that automatically run when typed and full path not needed to run. (eg script vs ./script)
+6. grep -A2 -B3 - displays matching results with 3 lines before it and 2 lines after
+
+7. cat /etc/os-release - find os info
+8. apropos - search through man pages names and descriptions. ex. apropos ext4, apropos printf
+9. hd or hexdump - shows a file in hex. hd shows the asci as well.
+
+10. strings - shows all the strings in the file. (longer than 4 chars and has a non-print char at the end)
+11. scp - used to share files on the local network (secure as its over SSH) 
+        - scp C:\Users\joaov\Downloads\File adminsmith@192.168.0.119:/home/adminsmith
+        - There's a colon between ip and file path for the target machine
+
+12. type - used to find aliases of comman
+13. readlink -f - check for links to a file. -f shows absolute path and follows symlinks too final file
+14. date - shows the date, day and time
+
+15. /etc/localtime - symbolic link to /usr/share/zoneinfo/Continent/Country, change the symbolic link to change your 
+    timezone
+16. timedatectl - a systemd program, that changes this automatically. 
+17. ln -s - a soft link to a non existence 
+
+18. python3 -m "http.server"   - makes the pwd available on the local network (through browswer). Ctrl + C stops it.
+19. cat /etc/*-release - os distro info
+
+20. grep -v  - excludes searches that match the pattern.
+21. '' - doesn't expand regex, "" - expand regex
+22. diff -s  -returns (yes they are) if the files are idenitical
