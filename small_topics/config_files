@@ -26,7 +26,15 @@ and your copy will be saved in the same folder with a `.rpmsave` file extension.
 It's main purpose is to allow you to have a fallback option. The .rpmnew or .rpmsave files are usually deleted later
 
 
-.rpmnew  - newly installed config, that's not being used
+.rpmnew  - newly installed config, that's being used
 
-.rpmnew  - previously installed config, that is not being used
+.rpmsave  - previously installed config, that is not being used
+
+
+
+
+ARCH LINUX 
+
+Arch also has this feature with .pacsave files storing the old config, unless the -n (no save) is used with -R. 
+
 
