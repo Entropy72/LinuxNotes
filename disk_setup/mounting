@@ -8,7 +8,7 @@ aka you can access the entire partition from where it has been mounted
 you can only mount by partitions and not drives (unless you using lvm)
 
 
-    -    `lsblk` - prior to mounting 
+    -    `lsblk` - prior to mounting (with -f flag, displays UUID)
     -    `df -h` - after mounting (shows mountpoint too)
 
 
@@ -47,6 +47,7 @@ FSTAB
                      - UUID is generated from the file system, and PARTUUID is generated from the partition
 
               dump* - an outdated tool used to back up the partition
+  		    - set to 0 to disable
 
               fs_check** - enables fs_check to be automatically periodically run on the partition
 			 - 0 - to disable that option
@@ -54,6 +55,8 @@ FSTAB
                          - 2 - to enable it on a non root partition
                          - this just allows fs check to be possible and doesn't actually do it
 
+              mount -a   - this mounts all the files specified in mount, without having to restart the device. 
+                           used to test if the mount is working and still have access to the system.
 
 
 SYSTEMD MOUNTS

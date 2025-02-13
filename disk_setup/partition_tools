@@ -16,14 +16,14 @@ CHECK OUT THE disk_setup FILE AS WELL
           - `lsblk | grep -v loop` - might help
 
 
+          -f  - displays the UUID of filesystems for partitions
 
 
-
- • partprobe - inform the OS of partition table changes
+  • partprobe - inform the OS of partition table changes
              - used when changes are made to the partition table (eg. using gdisk or parted)
 
 
-
+  • mount - lists all the mounted partitions and their details of how they were mounted.
 
 
 

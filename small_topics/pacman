@@ -1,0 +1,54 @@
+pacman is the main package manager for arch linux. it is used in conjuction to the official arch repostories. (and doesnt work with AUR, you need yay for that.)
+
+how does pacman work:
+
+
+pacman has a main catergory of upper case flags, and lower case flags.
+the lower case flags can sometimes act as a data filter to enter parameters into the main upper case command.
+
+
+ update system:
+
+       sudo pacman -Syu
+
+
+   -y  - this flag updates the local repostories (excluding AUR ones)
+   -S  - sync. depends on the other sub flags
+   -u  - makes -S only update the installed, outdated packages.
+
+   ...descriptions of these are dubious. -Syu is commonly used to update the system.
+
+
+ search system or repos:
+
+       pacman -Qs "package"  - searches the downloaded packages
+       pacman -Ss "regex"    - searches the names and descriptions of the packages in the repos.
+
+
+   -Q  - querys the database of the packages installed on the system.
+   -s  - search
+
+
+ installing packages:
+
+       sudo pacman -S "package"
+
+
+  removing a package:
+
+       sudo pacman -Rns "package_name"
+
+  -R   - remove a package
+  -n   - like .rpmsave, pacman saves the oldconfig file by default. can clog up the system.
+  -s   - removes only the dependencies that arent being used by other packages.
+
+
+
+yay does this but also includes AUR repos. very similar flags too.
+
+  -Sua   - to update only AUR repos
+
+
+- add these notes to the github
+- .rpmsave files has some misinfo
+- restore the swap files if needed

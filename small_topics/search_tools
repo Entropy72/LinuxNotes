@@ -17,6 +17,7 @@ SEARCHING FOR FILES
 
 
 • find - searches the filesystem for specified parameters.
+       - consider filtering out error msgs (due to lack of perms) (3>>/dev/null) or just using sudo.          
        
    Usage:
 
@@ -63,3 +64,11 @@ SEARCHING FOR FILES
         -w: Match the whole word (optional, depending on your search needs).
 
 
+• locate - similar to find but not as many options and filtering 
+         - it is faster as it searches it's own database, instead of the actual system.
+
+   Usage:
+
+        sudo updatedb   - updates the database for any new changes or new files added to search for          
+
+	locate <what you want to find>

@@ -1,0 +1,30 @@
+
+
+HOW TO MAKE AN ALIAS
+
+ There are temporary alias that work for only that shell session and persisten ones specificied in ~/.bashrc.
+   
+   • To view all aliases:
+
+          - alias
+
+   • For a temporary alias:
+
+          -  alias <new_alias>=<command>
+
+   • For a permanant alias like i think you care about:
+
+           - echo "alias <new_alias>='<command>'" >> ~./.bashrc
+           - add the same command to the bashrc file so that it is in effect on every session.
+            
+           - source ~./.bashrc
+           - refreshes the bashrc file
+
+
+   • To remove an alias:
+
+          - unalias <alias>    - works only in that shell session
+          - delete it from the ~./.bashrc.
+
+
+You can specify an alias in /etc/bash.bashrc instead to ensure that the alias works across different user shells.

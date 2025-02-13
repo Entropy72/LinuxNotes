@@ -23,7 +23,7 @@
 15. /etc/localtime - symbolic link to /usr/share/zoneinfo/Continent/Country, change the symbolic link to change your 
     timezone
 16. timedatectl - a systemd program, that changes this automatically. 
-17. ln -s - a soft link to a non existence 
+17. ln -s - a soft link to a non existent file 
 
 18. python3 -m "http.server"   - makes the pwd available on the local network (through browswer). Ctrl + C stops it.
 19. cat /etc/*-release - os distro info
@@ -31,3 +31,5 @@
 20. grep -v  - excludes searches that match the pattern.
 21. '' - doesn't expand regex, "" - expand regex
 22. diff -s  -returns (yes they are) if the files are idenitical
+
+23. /etc/profile - where you can change your $PATH 

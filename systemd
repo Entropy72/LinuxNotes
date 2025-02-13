@@ -40,8 +40,14 @@ UNIT FILES
       There is a graphical target, multi user target or rescue target that calls the services for the system to be in a 
       graphical, multi user or rescue mode.
 
+      When a service is enabled, a symbolic link to it is made in a directory where all enabled services for that target are.
+      eg.  (/etc/systemd/system/multi-user.target.want/nginx.servce)
+       
+systemctl get-default
 
-systemctl setdefault 
+systemctl setdefault <file>.target
+
+========================================================================================================================
 
 
 ~/.config/systemd/user - applies to only that user and holds priority over the rest
@@ -114,6 +120,7 @@ SYSTEMCTL
 				  reloaded.
 
       
+      `systemctl list-unit-files --type=service | grep enabled` - search for enabled services.
 
 
  

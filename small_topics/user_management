@@ -1,0 +1,20 @@
+
+Managing users and groups:
+
+   
+   • useradd -m -G wheel -s /bin/bash <newuser>  - creates a new user 
+    
+           -m  - automatically creates a home directory for the user
+           -G  - adds the user to the wheel group as a supplementary group. wheel allows for sudo priveledges.
+           -s  - specifies the shell as bash.
+
+
+   • passwd <username> - adds a password for the user's account
+
+
+   • userdel -r <username>  - deletes a user, and the group created on it's formation.
+
+           -r  - deletes the user's home directory
+
+
+    
