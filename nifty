@@ -33,3 +33,5 @@
 22. diff -s  -returns (yes they are) if the files are idenitical
 
 23. /etc/profile - where you can change your $PATH 
+24. ~/.local/share/applications/[myapp].desktop  - make your desktop entries like this
+

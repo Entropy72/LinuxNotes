@@ -1,0 +1,8 @@
+
+There are a few main ways by which programs start up on boot.
+
+• set them up as enabled through systemd
+
+• set up a desktop entry in ~/.config/autostart
+
+• set up a chron job

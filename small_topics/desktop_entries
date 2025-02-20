@@ -1,0 +1,40 @@
+
+WHAT IS A DESKTOP ENTRY?
+
+
+• A desktop entry is a file that is usually created by gui applications to run them from a shortcut or from search. aka you need this to run your program
+ from the gui.
+
+  - they are stored in either:
+
+                • ~/.local/share/applications/   - for user specific desktop entries. has greater priority over the /usr ones
+		• /usr/share/applications/  - for global desktop entries
+
+  
+  - they are named:
+
+                • with a .desktop extension
+		• ex. [appname].desktop, discord-canary.desktop
+
+ 
+   - they specified like this:
+
+             •  [Desktop Entry]
+		Name=MyApp
+		Comment=This is my application
+		Exec=/path/to/your/script.sh
+		Icon=/path/to/icon.png
+		Terminal=false
+      	       	Type=Application
+		Categories=Utility;                  - used to sort applications the gui. 
+
+
+           
+   - to run them:
+
+		• make the .desktop file a executable
+
+                • update-desktop-database ~/.local/share/applications/   -or specify other location. refreshes the known list of desktop entries
+
+                • you can just log in and log out to refresh as well
+                     
