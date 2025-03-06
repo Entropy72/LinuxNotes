@@ -29,8 +29,10 @@ SEARCHING FOR FILES
 
    Flags:
 
-       - `exec command {} +` - executes the command on all the found files. {} is a placeholder for the file name. + is 
+       - `-exec command {} +` - executes the command on all the found files. {} is a placeholder for the file name. + is 
                                for termination.
+			      - you can \: instead of + to run the command on each file, one at a time. + can be more efficient but use depending on the 
+                                command syntax
        - `-E` - extended regex
 
      

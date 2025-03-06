@@ -44,11 +44,33 @@ the lower case flags can sometimes act as a data filter to enter parameters into
 
 
 
-yay does this but also includes AUR repos. very similar flags too.
+ yay does this but also includes AUR repos. very similar flags too.
 
   -Sua   - to update only AUR repos
 
 
-- add these notes to the github
+  check important installed packages: 
+ 
+           pacman -Qmq / pacman -Qet
+ 
+   -Q - query
+   -m - foreign packages (manually installed or from AUR) 
+   -e - can explicitly downloaded packages. can use it instead
+   -q - doesnt show package version
+   -t - doesnt show required packages
+
+
+  clean up the system:
+
+	sudo pacman -Rns $(pacman -Qtdq)
+
+    -removes orphan (not required) packages.
+    -d - lists dependencies
+    -t - doesnt show required packages
+
+        sudo paccache -r
+
+     - cleans the cache, doenst clear it         
+
+
 - .rpmsave files has some misinfo
-- restore the swap files if needed
